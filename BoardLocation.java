@@ -3,26 +3,28 @@ import java.util.List;
 // habib
 public abstract class BoardLocation
 {
-    protected static BoardLocation go;
     protected String name;
-    protected int cost;
     protected List<Player> currentPlayers;
+    private BoardLocation next;
 
-
-    // they pass in the head of the linked list
-    // we
-    public BoardLocation(BoardLocation go)
+    public BoardLocation()
     {
-        this.go = go;
+        next = null;
     }
 
-    public static BoardLocation getGo()
+    public void setNext(BoardLocation next)
     {
-        return go;
+        this.next = next;
     }
 
     public void addPlayerToBoardPiece()
     {
-        
     }
+
+    public BoardLocation getNext()
+    {
+        return next;
+    }
+
+
 }

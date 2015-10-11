@@ -6,14 +6,52 @@ public class Player
     private final Token token;               //  token class
     private int money;                      //  how much money you have
     private BoardLocation location;         //  the current player location
-    private List<Property> properties;      // the properties we own
+    private List<Buyable> properties;      // the properties we own
+    private boolean bankrupt;
 
     public Player(String token)
     {
         this.money = 0;
-        this.location = BoardLocation.getGo();
+        this.location = Game.getGo();
         this.token = new Token(token);
         this.properties = new ArrayList<>();
+    }
+
+    public boolean buyLocation(Buyable buyable)
+    {
+        if ( buyable.getCost() <= money &&
+             buyable.getOwner() == null )
+        {
+            properties.add(buyable);
+            addMoney(-buyable.getCost());
+            buyable.setOwner(this);
+            return true;
+        }
+        return false;
+    }
+
+    public void move(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            location = location.getNext();
+            if (location==Game.getGo())
+            {
+                addMoney(200);
+            }
+        }
+
+        // location is someone else property?
+        if ( location instanceof Buyable &&
+             ((Buyable)(location)).isOwned())
+        {
+            ((Buyable)(location)).collectRent(this);
+        }
+    }
+
+    public List<Buyable> getProperties()
+    {
+        return properties;
     }
 
     public void addMoney(int money)
@@ -34,18 +72,17 @@ public class Player
 
     public void setMoney(int money)
     {
-        if ( money <= 0 ) return;
+        if (this.money+money<0)
+        {
+            declareBankruptcy();
+        }
+
         this.money = money;
     }
 
-    public List<Property> getProperties()
+    private void declareBankruptcy()
     {
-        return properties;
-    }
-
-    public void setProperties(List<Property> properties)
-    {
-        this.properties = properties;
+        this.bankrupt = true;
     }
 
     public BoardLocation getLocation()
@@ -56,5 +93,10 @@ public class Player
     public void setLocation(BoardLocation location)
     {
         this.location = location;
+    }
+
+    public boolean isBankrupt()
+    {
+        return bankrupt;
     }
 }

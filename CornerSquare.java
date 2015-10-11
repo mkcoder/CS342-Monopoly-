@@ -1,3 +1,3 @@
-public class CornerSquare
+public class CornerSquare extends BoardLocation
 {
 }
