@@ -1,0 +1,4 @@
+*.name
+.idea/compiler.xml
+*.xml
+.idea/CS342-Monopoly-.iml
