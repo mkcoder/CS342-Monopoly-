@@ -1,4 +1,7 @@
 *.name
+.idea
+.idea/*
 .idea/compiler.xml
 *.xml
 .idea/CS342-Monopoly-.iml
+*.class
