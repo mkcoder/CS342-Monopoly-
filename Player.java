@@ -6,7 +6,7 @@ public class Player
     private final Token token;               //  token class
     private int money;                      //  how much money you have
     private BoardLocation location;         //  the current player location
-    private List<Buyable> properties;      // the properties we own
+    private List<Property> properties;      // the properties we own
     private boolean bankrupt;
 
     public Player(String token)
@@ -17,7 +17,7 @@ public class Player
         this.properties = new ArrayList<>();
     }
 
-    public boolean buyLocation(Buyable buyable)
+    public boolean buyLocation(Property buyable)
     {
         if ( buyable.getCost() <= money &&
              buyable.getOwner() == null )
@@ -42,14 +42,14 @@ public class Player
         }
 
         // location is someone else property?
-        if ( location instanceof Buyable &&
-             ((Buyable)(location)).isOwned())
+        if ( location instanceof Property &&
+             ((Property)(location)).isOwned())
         {
-            ((Buyable)(location)).collectRent(this);
+            ((Property)(location)).collectRent(this);
         }
     }
 
-    public List<Buyable> getProperties()
+    public List<Property> getProperties()
     {
         return properties;
     }
