@@ -1,8 +1,8 @@
 public abstract class Property extends BoardLocation
 {
-    protected int cost;
-    protected Player owner;
-    protected int rent;
+    protected int cost;						// the cost of property
+    protected Player owner;					// who owns the  property
+    protected int rent;						// how much rent the person who lends pays
 
     public abstract void collectRent(Player player);
 

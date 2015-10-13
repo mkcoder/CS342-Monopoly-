@@ -3,12 +3,12 @@ import java.util.*;
 public class Player
 {
     // DATA DICTIONARY
-    private final Token token;               //  token class
-    private int money;                      //  how much money you have
-    private BoardLocation location;         //  the current player location
-    private List<Property> properties;      // the properties we own
-    private boolean bankrupt;
-
+    private final Token token;				// token class
+    private int money;						// how much money you have
+    private BoardLocation location;			// the current player location
+    private List<Property> properties;		// the properties we own
+    private boolean bankrupt;				// is the person bankrupt
+    
     public Player(String token)
     {
         this.money = 0;
@@ -16,7 +16,7 @@ public class Player
         this.token = new Token(token);
         this.properties = new ArrayList<>();
     }
-
+    
     public boolean buyLocation(Property buyable)
     {
         if ( buyable.getCost() <= money &&
@@ -30,6 +30,11 @@ public class Player
         return false;
     }
 
+    public void sellLocation()
+    {                         
+    	// TODO: not required!    
+    }                             
+    
     public void move(int n)
     {
         for (int i = 0; i < n; i++)
