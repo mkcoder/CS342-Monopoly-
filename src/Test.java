@@ -41,23 +41,31 @@ public class Test
 		player2 = new Player("Boot", board[0]);
 		
 		for(BoardLocation b : board)
-			System.out.println(b.toString());
+			System.out.println(b);
+		
+		System.out.println();
 		
 		player1.move(3);
 		if(player1.buyLocation((Property) player1.getLocation()))
-			System.out.println(player1.toString() + " bought " + player1.getLocation().toString());
+			System.out.println(player1 + " bought " + player1.getLocation());
 		
-		System.out.println(player2.toString() + " moves 3");
+		System.out.println(player2 + " moves 3");
 		player2.move(3);
-		System.out.println("Player1 has $" + player1.getMoney());
+		System.out.println(player1 + " collected rent from " + player2);
 		
+		System.out.println(player1 + " moves 4");
 		player1.move(4);
-		System.out.println("Player1 has $" + player1.getMoney());
+		System.out.println(player1 + " got rewarded");
 		
+		System.out.println(player1 + " buys 2 houses");
 		((Lot) player1.getProperties().get(0)).improve();
 		((Lot) player1.getProperties().get(0)).improve();
+		System.out.println(player2 + " makes a cycle");
 		player2.move(15);
-		System.out.println("Player1 has $" + player1.getMoney());
-		System.out.println("Player2 has $" + player2.getMoney());
+		System.out.println(player1 + " collected rent from " + player2);
+		
+		((Lot) player1.getProperties().get(0)).diminish();
+		((Lot) player1.getProperties().get(0)).diminish();
+		System.out.println(player1 + " sold 2 houses");
 	}
 }
