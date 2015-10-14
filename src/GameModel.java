@@ -10,7 +10,7 @@ public class GameModel
                 new Lot("MEDITERRANEAN AVE", 1, 60, "Dark Purple", 50, new int[] { 2, 10, 30, 90, 160, 230}),
                 new CardSquare("Community Chest", 2),
                 new Lot("BALTIC AVE.", 3, 60, "Dark Purple", 50, new int[] { 4, 20, 60, 180, 320, 450}),
-                new CardSquare("Income Tax", 4),
+                new TaxSquare("Income Tax", 4, 200),
                 new RailRoad("READING RAILROAD", 5, 200),
                 new Lot("ORIENTAL AVE.", 6, 100, "Light Blue", 50, new int[] { 6, 30, 90, 270, 400, 550}),
                 new CardSquare("Chance", 7),
