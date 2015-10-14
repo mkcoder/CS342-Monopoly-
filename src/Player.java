@@ -5,6 +5,7 @@ import java.util.*;
 public class Player
 {
     // DATA DICTIONARY
+	private static final int INITIAL_MONEY = 1500;
 	private static int dice = 0;			// dice value
     private final String token;				// token
     private int money;						// how much money you have
@@ -14,7 +15,7 @@ public class Player
     
     public Player(String token, BoardLocation go)
     {
-        this.money = 0;
+        this.money = INITIAL_MONEY;
         this.location = go;
         this.token = token;
         this.properties = new ArrayList<>();
@@ -49,7 +50,6 @@ public class Player
             }
         }
 
-        // location is someone else property?
         if ( location instanceof Property &&
              ((Property)(location)).isOwned())
         {

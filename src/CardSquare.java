@@ -5,7 +5,6 @@ public class CardSquare extends BoardLocation
 	public CardSquare(String name, int address)
 	{
 		super(name, address);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

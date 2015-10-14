@@ -4,9 +4,9 @@ public class RailRoad extends Property
 {
 	private RailRoad[] others;
 	
-	public RailRoad(int cost, String name, int address)
+	public RailRoad(String name, int address, int cost)
 	{
-		super(cost, name, address);
+		super(name, address, cost);
 		others = new RailRoad[3];
 	}	
 	

@@ -4,9 +4,9 @@ public class Utility extends Property
 {
 	private Utility other;
 	
-	public Utility(int cost, String name, int address)
+	public Utility(String name, int address, int cost)
 	{
-		super(cost, name, address);
+		super(name, address, cost);
 	}
 
 	@Override

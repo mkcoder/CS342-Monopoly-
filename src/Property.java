@@ -6,7 +6,7 @@ public abstract class Property extends BoardLocation
     protected Player owner;					// who owns the  property
     //protected int rent;						// how much rent the person who lends pays
 
-    public Property(int cost, String name, int address)
+    public Property(String name, int address, int cost)
     {
     	super(name,address);
         this.cost = cost;

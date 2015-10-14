@@ -7,10 +7,10 @@ public class Lot extends Property
 	private int rentIndex;
 	private final int improve;
 	
-	public Lot(int cost, String name, String color, 
-			   int address, int improve, int[] rent)
+	public Lot(String name, int address, int cost, 
+			   String color, int improve, int[] rent)
 	{
-		super(cost, name, address);
+		super(name, address, cost);
 		this.color = color;
 		this.rent = rent;
 		this.rentIndex = 0;
