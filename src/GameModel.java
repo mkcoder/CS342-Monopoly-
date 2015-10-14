@@ -1,4 +1,11 @@
-new BoardLocation[] {
+package src;
+
+public class GameModel
+{
+
+    public static BoardLocation[] GetModel()
+    {
+        return new BoardLocation[] {
                 new CornerSquare("Go", 0),
                 new Lot("MEDITERRANEAN AVE", 1, 60, "Dark Purple", 50, new int[] { 2, 10, 30, 90, 160, 230}),
 
@@ -78,3 +85,5 @@ new BoardLocation[] {
 
                 new Lot("BOARDWALK", 39, 400, "Dark Blue", 200, new int[] { 50, 200, 600, 1400, 1700, 2000}),
         };
+    }
+}
