@@ -27,8 +27,8 @@ public class Game
 	public void playGame()
 	{
 		
-		Queue<Player> queue_player = setUpPlayersQueue();
-		
+		Queue<Player> queuePlayer = setUpPlayersQueue();
+		System.out.println(queuePlayer.peek());
 // QUEUE		
 //		boolean hasWon = false;
 //		
@@ -37,6 +37,7 @@ public class Game
 //			sortByRandomPlayer(player, diceRoll);
 //			
 //		}
+		
 		
 		dice = 3;
 		players[0].move(dice);
@@ -70,12 +71,14 @@ public class Game
 	private Queue<Player> setUpPlayersQueue() 
 	{
 		// TODO Auto-generated method stub
-		Queue<Player> queuePlayers = new LinkedList<>();		
+		Queue<Player> queuePlayers = new LinkedList<>();
+		for(Player p : players)
+			queuePlayers.add(p);
 		int firstPlayer = (int)(Math.random()*players.length);
-		for ( int i = firstPlayer; firstPlayer < players.length; i++ ) 
-			queuePlayers.add(players[firstPlayer]);
-		for ( int i = 0; i < firstPlayer; i++ ) 
-			queuePlayers.add(players[i]);
+		for ( int i = 0; i < firstPlayer; i++ )
+		{
+			queuePlayers.add(queuePlayers.poll());
+		}
 		
 		return queuePlayers;
 	}
