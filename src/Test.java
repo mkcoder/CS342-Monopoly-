@@ -47,11 +47,16 @@ public class Test
 		if(player1.buyLocation((Property) player1.getLocation()))
 			System.out.println(player1.toString() + " bought " + player1.getLocation().toString());
 		
-		System.out.println("Before player 2 moved");
-		System.out.println("Player1 has $" + player1.getMoney());
-		System.out.println("Player2 has $" + player2.getMoney());
+		System.out.println(player2.toString() + " moves 3");
 		player2.move(3);
-		System.out.println("After player 2 moved");
+		System.out.println("Player1 has $" + player1.getMoney());
+		
+		player1.move(4);
+		System.out.println("Player1 has $" + player1.getMoney());
+		
+		((Lot) player1.getProperties().get(0)).improve();
+		((Lot) player1.getProperties().get(0)).improve();
+		player2.move(15);
 		System.out.println("Player1 has $" + player1.getMoney());
 		System.out.println("Player2 has $" + player2.getMoney());
 	}

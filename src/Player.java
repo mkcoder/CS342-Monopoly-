@@ -55,12 +55,14 @@ public class Player
         {
             ((Property)(location)).collectRent(this);
         }
+        else if(location instanceof CardSquare)
+        	((CardSquare)(location)).reward(this);
     }
 
-    /*public List<Property> getProperties()
+    public List<Property> getProperties()
     {
         return properties;
-    }*/
+    }
 
     public void addMoney(int money)
     {
