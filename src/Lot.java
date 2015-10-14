@@ -5,7 +5,7 @@ public class Lot extends Property
 	private final String color;					// color of the board piece
 	private final int[] rent;
 	private int rentIndex;
-	private final int improve;
+	private final int improveCost;
 	
 	public Lot(String name, int address, int cost, 
 			   String color, int improve, int[] rent)
@@ -14,7 +14,7 @@ public class Lot extends Property
 		this.color = color;
 		this.rent = rent;
 		this.rentIndex = 0;
-		this.improve = improve;
+		this.improveCost = improve;
 	}
 
 	@Override
@@ -29,10 +29,20 @@ public class Lot extends Property
 	
 	public void improve()
 	{
+		if(owner != null && owner.getMoney() >= improveCost && rentIndex < rent.length - 1)
+		{
+			rentIndex++;
+			owner.addMoney(-improveCost);
+		}
 	}
 	
 	public void diminish()
 	{
+		if(owner != null && rentIndex > 0)
+		{
+			rentIndex--;
+			owner.addMoney(improveCost/2);
+		}
 	}
 
 	@Override
