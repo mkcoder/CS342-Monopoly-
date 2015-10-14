@@ -31,7 +31,7 @@ public abstract class BoardLocation
     @Override
     public String toString()
     {
-    	return "src.Location: " + name;
+    	return "BoardLocation: " + name;
     }
     
     public static void Link(BoardLocation[] board)

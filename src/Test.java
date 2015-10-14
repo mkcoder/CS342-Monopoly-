@@ -40,11 +40,9 @@ public class Test
 		player1 = new Player("Car", board[0]);
 		player2 = new Player("Boot", board[0]);
 		
-		//toString()
 		for(BoardLocation b : board)
 			System.out.println(b.toString());
 		
-		//move()
 		player1.move(3);
 		if(player1.buyLocation((Property) player1.getLocation()))
 			System.out.println(player1.toString() + " bought " + player1.getLocation().toString());
@@ -52,8 +50,7 @@ public class Test
 		System.out.println("Before player 2 moved");
 		System.out.println("Player1 has $" + player1.getMoney());
 		System.out.println("Player2 has $" + player2.getMoney());
-		player2.move(3);		
-		((Lot) player2.getLocation()).collectRent(player2);
+		player2.move(3);
 		System.out.println("After player 2 moved");
 		System.out.println("Player1 has $" + player1.getMoney());
 		System.out.println("Player2 has $" + player2.getMoney());

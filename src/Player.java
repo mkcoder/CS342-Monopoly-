@@ -57,10 +57,10 @@ public class Player
         }
     }
 
-    public List<Property> getProperties()
+    /*public List<Property> getProperties()
     {
         return properties;
-    }
+    }*/
 
     public void addMoney(int money)
     {
@@ -122,8 +122,8 @@ public class Player
 	public String toString()
 	{
 		if(!bankrupt)
-			return "src.Player: " + token + " has $" + money;
+			return "Player: " + token + " has $" + money;
 		else
-			return "src.Player: " + token + " is broke :(";
+			return "Player: " + token + " is broke :(";
 	}
 }
