@@ -9,32 +9,7 @@ public class Test
 		Player player2;
 		
 		//init
-		board = new BoardLocation[]
-				{
-					new CornerSquare("Go", 0),
-					new Lot("MEDITERRANEAN AVE", 1, 60, "Dark Purple", 50, 
-							new int[] { 2, 10, 30, 90, 160, 230}),
-					new CardSquare("Community Chest", 2),
-					new Lot("BALTIC AVE.", 3, 60, "Dark Purple", 50, 
-							new int[] { 4, 20, 60, 180, 320, 450}),
-					new TaxSquare("Income Tax", 4, 200),
-					new RailRoad("READING RAILROAD", 5, 200),
-					new Lot("ORIENTAL AVE.", 6, 100, "Light Blue", 50, 
-							new int[] { 6, 30, 90, 270, 400, 550}),
-					new CardSquare("Chance", 7),
-					new Lot("VERMONT AVE.", 8, 100, "Light Blue", 50, 
-							new int[] { 6, 30, 90, 270, 400, 550}),
-					new Lot("CONNECTICUT AVE.", 9, 120, "Light Blue", 50, 
-							new int[] { 8, 40, 100, 300, 450, 600}),
-					new CornerSquare("Jail/Just Visiting", 10),
-					new Lot("ST. CHARLES PLACE", 11, 140, "Light Purple", 100, 
-							new int[] { 10, 50, 150, 450, 625, 750}),
-					new Utility("ELECTRIC COMPANY", 12, 150),
-					new Lot("STATES AVE.", 13, 140, "Light Purple", 100, 
-							new int[] { 10, 50, 150, 450, 625, 750}),
-					new Lot("VIRGINIA AVE.", 14, 160, "Light Purple", 100, 
-							new int[] { 12, 60, 180, 500, 700, 900}),				
-				};
+		board = GameModel.GetModel();
 		BoardLocation.Link(board);
 		
 		player1 = new Player("Car", board[0]);
@@ -67,5 +42,9 @@ public class Test
 		((Lot) player1.getProperties().get(0)).diminish();
 		((Lot) player1.getProperties().get(0)).diminish();
 		System.out.println(player1 + " sold 2 houses");
+		
+		for (int i = 0; i < 100; i++ ) {
+			System.out.println("ROLL DICE: " + Player.RollDice());
+		}
 	}
 }

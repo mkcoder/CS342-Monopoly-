@@ -109,7 +109,12 @@ public class Player
     {
         return bankrupt;
     }
-
+    
+    public static int RollDice()
+    {
+    	return (dice = (int) (((double)Math.random()*6)+1));
+    }
+    
 	public int getDice()
 	{
 		return dice;
