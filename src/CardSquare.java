@@ -1,3 +1,5 @@
+package src;
+
 public class CardSquare extends BoardLocation
 {
 	public CardSquare(String name, int address)

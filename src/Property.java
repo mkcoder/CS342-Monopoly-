@@ -1,3 +1,5 @@
+package src;
+
 public abstract class Property extends BoardLocation
 {
     protected final int cost;						// the cost of property

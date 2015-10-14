@@ -1,3 +1,5 @@
+package src;
+
 public class CornerSquare extends BoardLocation
 {	
 	public CornerSquare(String name, int address)

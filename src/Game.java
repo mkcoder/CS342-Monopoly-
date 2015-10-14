@@ -1,5 +1,7 @@
-import java.awt.Graphics;
-import javax.swing.JApplet;
+package src;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class Game extends JApplet
 {

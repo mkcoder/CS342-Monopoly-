@@ -1,3 +1,5 @@
+package src;
+
 public class RailRoad extends Property
 {
 	private RailRoad[] others;

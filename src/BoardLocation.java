@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,6 @@ public abstract class BoardLocation
     @Override
     public String toString()
     {
-    	return "Location: " + name;
+    	return "src.Location: " + name;
     }
 }

@@ -1,3 +1,5 @@
+package src;
+
 import java.util.*;
 
 public class Player
@@ -120,8 +122,8 @@ public class Player
 	public String toString()
 	{
 		if(!bankrupt)
-			return "Player: " + token + " has $" + money;
+			return "src.Player: " + token + " has $" + money;
 		else
-			return "Player: " + token + " is broke :(";
+			return "src.Player: " + token + " is broke :(";
 	}
 }

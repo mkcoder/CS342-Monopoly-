@@ -1,3 +1,5 @@
+package src;
+
 public class Lot extends Property
 {
 	private final String color;					// color of the board piece
