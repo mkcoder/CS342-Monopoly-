@@ -2,7 +2,25 @@ package src;
 
 public class GameModel
 {
-
+    /*
+    * REGULAR EXPRESSION USED TO CREATE:
+    * http://regexr.com/3bvqo
+    * ^\[(.+?)\].([a-zA-Z].+)\s\(([0-9]*.+)\).+\$(.+?),.+\n.+RENT:..(.+?);.+?\$(.+?);.+?\$(.+?);.+?\$(.+),.+\$(.+);\n.+?\$(.+);.+\$(.+)
+    * http://www.regexr.com/3bvqr
+    * ^([a-bA-Z].+)\s\((.+)\)$
+    * http://www.regexr.com/3bvqu
+    * ([a-zA-Z].+\sRAILROAD).+\((.+)\).+\$(.+),.+
+    * http://www.regexr.com/3bvr1
+    * ([a-zA-Z].+\COMPANY).+\((.+)\).+\$(.+),.+
+    * http://www.regexr.com/3bvr4
+    * ([a-zA-Z].+WORKS).+\((.+)\).+\$(.+),.+
+    * http://www.regexr.com/3bvr7
+    * (.+Go\".+)
+    * http://www.regexr.com/3bvra
+    * new CardSquare(\("Luxury Tax".+)\)
+    * http://www.regexr.com/3bvrd
+    * ^\n
+    * */
     public static BoardLocation[] GetModel()
     {
         return new BoardLocation[] {
