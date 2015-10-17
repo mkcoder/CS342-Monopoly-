@@ -2,7 +2,7 @@ package src;
 
 public class Test
 {
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		Game game = new Game(4);	
 		System.out.println("======================/ BOARD /======================");
@@ -11,5 +11,5 @@ public class Test
 		game.printPlayers();
 		System.out.println("======================/ GAME PLAY /======================");
 		game.playGame();
-	}
+	}*/
 }
