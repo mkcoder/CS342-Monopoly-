@@ -1,6 +1,10 @@
 package src;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class Applet extends JApplet
+public class Applet extends JApplet implements ActionListener, ItemListener
 {
 	public static final String BOARD_FILE = "./src/mon.jpg";
 	public static final String CAR = "./src/car.png";
@@ -19,11 +23,18 @@ public class Applet extends JApplet
 	BufferedImage boardImage;
 	BufferedImage carImage;
 	
+	//JComponents
+	private JButton diceRoll; 
+	
 	
 	public void init()
 	{
 		boardImage = getImage(BOARD_FILE);
 		carImage = getImage(CAR);
+	
+		
+		diceRoll = new JButton("Roll Dice!");
+		
 		
 	}
 	
@@ -114,4 +125,18 @@ public class Applet extends JApplet
 		
 		return img;
 	}
+
+    @Override
+    public void itemStateChanged(ItemEvent e)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }
