@@ -88,7 +88,7 @@ public class Applet extends JApplet
 		{
 			img = ImageIO.read(new File(fileName));
 		} 
-		catch (IOException e) 
+		catch (IOException e)
 		{
 		}
 		
