@@ -16,12 +16,38 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 {
 	public static final String BOARD_FILE = "./src/mon.jpg";
 	public static final String CAR = "./src/car.png";
+	public static final String DOG = "./src/dog.png";
+	public static final String HAT = "./src/hat.png";
+	public static final String IRON = "./src/iron.png";
+	public static final String THIMBLE = "./src/thimble.png";
+	public static final String SHIP = "./src/ship.png";
+	public static final String BOOT = "./src/boot.png";
+	public static final String WHEELBARROW = "./src/wheelbarrow.png";
+
+
+
+
+
+	
 	public static final int OFFSET_X = 10;
 	public static final int OFFSET_Y = 10;
 	public static final String diceDefaultLabel = "Dice roll result:  ";
+	
 	private BufferedImage boardImage;
     private BufferedImage carImage;
+    private BufferedImage dogImage;
+    private BufferedImage hatImage;
+    private BufferedImage ironImage;
+    private BufferedImage thimbleImage;
+    private BufferedImage shipImage;
+    private BufferedImage bootImage;
+    private BufferedImage wheelImage;
+    
+    
+    
+   
     private Point  [] coordArray;
+    
     private Game game;
     
 	//JComponents
@@ -51,6 +77,16 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	   	
 		boardImage = getImage(BOARD_FILE);
 		carImage = getImage(CAR);
+		dogImage = getImage(DOG);
+		hatImage = getImage(HAT);
+		ironImage = getImage(IRON);
+		thimbleImage = getImage(THIMBLE);
+		shipImage = getImage(SHIP);
+		bootImage = getImage(BOOT);
+		wheelImage = getImage(WHEELBARROW);
+		
+		
+		
 		game = new Game(new Integer(JOptionPane.showInputDialog("how many players")));
 		
 		diceRollBtn = new JButton("Roll Dice!");
