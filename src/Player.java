@@ -39,24 +39,44 @@ public class Player
     	// TODO: not required!    
     }
     
-    public void move(int n)
+    public String move(int n)
     {
+        String s;
+        String result;        
+        int money; 
+        result = "";
+        money = this.getMoney();
+                
         for (int i = 0; i < n; i++)
         {
             location = location.getNext();
             if (location.getName().equals("Go"))
             {
                 addMoney(200);
+                result += "I just went passed GO.\n";
             }
         }
 
         if ( location instanceof Property &&
              ((Property)(location)).isOwned())
-        {
+        {            
             ((Property)(location)).collectRent(this);
+            
+            result += "I just paid " + (money-getMoney()) + " in rent to ."+((Property)location).getOwner().getToken()+"\n";
+        }
+        else if (location instanceof Property)
+        {
+            result += "This property is not owned. You can purchase it!\n";
         }
         else if(location instanceof CardSquare)
-        	((CardSquare)(location)).reward(this);
+        {
+        	((CardSquare)(location)).reward(this);        	
+        	s = String.format("You were %s %d.\n", 
+        	            (money-getMoney() < 0) ? "penalized" : "rewarded",
+        	            Math.abs(money-getMoney()));        	
+        	result += s;
+        }
+        return result;
     }
 
     public List<Property> getProperties()
@@ -109,18 +129,17 @@ public class Player
     {
         return bankrupt;
     }
-    
-    public static int RollDice()
-    {
-    	return (dice = (int) (((double)Math.random()*6)+1));
-    }
-    
-	public int getDice()
+
+	public static int getDice()
 	{
 		return dice;
 	}
 	
-	public String getToken()
+	public static void setDice(int dice) {
+        Player.dice = dice;
+    }
+
+    public String getToken()
 	{
 		return token;
 	}

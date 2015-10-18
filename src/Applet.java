@@ -18,24 +18,80 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	public static final String CAR = "./src/car.png";
 	public static final int OFFSET_X = 10;
 	public static final int OFFSET_Y = 10;
-	private Point  [] coordArray;
-	
-	BufferedImage boardImage;
-	BufferedImage carImage;
-	
+	public static final String diceDefaultLabel = "Dice roll result:  ";
+	private BufferedImage boardImage;
+    private BufferedImage carImage;
+    private Point  [] coordArray;
+    private Game game;
+    
 	//JComponents
-	private JButton diceRoll; 
+	private JButton    diceRollBtn; 	
+	private JButton    buyPropertyBtn;
+	private JButton    improvePropertyBtn;    
+	private JButton    giveTurnBtn;    
+    private JLabel     diceRollLabel;
+	private JLabel     playerLabel;	
+	private JLabel     playerPropertiesLabel;
+	private JLabel     boardLocationNotificationLabel;
+    private JComboBox  playerPropertiesCombo;
 	
 	
 	public void init()
 	{
+	    BorderLayout layout;
+	    GridLayout gLayout;
+	    JPanel panel;
+	    
+	    gLayout = new GridLayout(10, 0);
+	    layout = new BorderLayout();
+	    panel = new JPanel(); 	
+	    
+	    panel.setLayout(gLayout);
+	    setLayout(layout);
+	   	
 		boardImage = getImage(BOARD_FILE);
 		carImage = getImage(CAR);
-	
+		game = new Game(new Integer(JOptionPane.showInputDialog("how many players")));
 		
-		diceRoll = new JButton("Roll Dice!");
+		diceRollBtn = new JButton("Roll Dice!");
+		buyPropertyBtn = new JButton("Buy property");
+		improvePropertyBtn = new JButton("Improve property");
+		giveTurnBtn = new JButton("Give up turn");
+		
+		diceRollLabel = new JLabel("dice");
+		playerLabel = new JLabel(game.getCurrentPlayer().toString()); // PLAYER [$Money]		
+		playerPropertiesLabel = new JLabel("prop"); // info about current player combo property
+		boardLocationNotificationLabel = new JLabel("noti");
+		playerPropertiesCombo = new JComboBox();
+		
+		// ACTION LISTENERS
+		diceRollBtn.addActionListener(new ActionListener() {            
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            { 
+                diceRollLabel.setText(diceDefaultLabel + game.rollDice()); 
+                game.getCurrentPlayer().move(Player.getDice());
+            }
+        });
 		
 		
+		buyPropertyBtn.addActionListener(this);
+		improvePropertyBtn.addActionListener(this);
+		giveTurnBtn.addActionListener(this);
+        playerPropertiesCombo.addItemListener(this);
+
+        panel.add(playerLabel);
+        panel.add(diceRollLabel);
+        panel.add(boardLocationNotificationLabel);
+        panel.add(diceRollBtn);
+        panel.add(buyPropertyBtn);
+        panel.add(improvePropertyBtn);
+        panel.add(giveTurnBtn);
+        panel.add(playerPropertiesLabel);
+        panel.add(playerPropertiesCombo);
+        
+        add(panel, layout.EAST);
+        
 	}
 	
 	@Override
@@ -56,7 +112,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		coordArray = getPoints(imgScale);
 		
 		g.drawImage(boardImage, OFFSET_X, OFFSET_Y, imgScale, imgScale, null);
-		//g.drawImage(carImage, OFFSET_X, OFFSET_Y, null);
+		
 		
 		for(Point p: coordArray)
 		{
@@ -70,10 +126,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	    Point [] tempCoord;
 	    double divFactor;
 	 
-	    
 	    tempCoord = new Point[40];
 	    divFactor = (imageScale/10) * (0.825);
-	    
 	    
 	    for(int i = 0; i < 11 ;i++)
 	    {
@@ -95,17 +149,11 @@ public class Applet extends JApplet implements ActionListener, ItemListener
             tempCoord[i] = new Point((int) (imageScale-divFactor),(int) (divFactor*(i-30)+divFactor*.9));
         }
 	    
-	    System.out.println("****************"+imageScale+"*******************************");
 	    for(Point p: tempCoord)
 	    {
 	        p.x = p.x + OFFSET_X;
 	        p.y = p.y + OFFSET_Y;
-	        
-	         
-	        System.out.println((p.x) + " " + p.y);
 	    }
-	    System.out.println();
-	    
 	    
         return tempCoord;
 	}
@@ -127,16 +175,18 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	}
 
     @Override
+    public void actionPerformed(ActionEvent e)
+    {
+//        if (e.getSource() == diceRollBtn) 
+//        {
+//            
+//        }
+    }
+    
+    @Override
     public void itemStateChanged(ItemEvent e)
     {
-        // TODO Auto-generated method stub
         
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        // TODO Auto-generated method stub
-        
-    }
 }

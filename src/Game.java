@@ -3,6 +3,7 @@
 package src;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,28 +16,21 @@ public class Game
     private Player currentPlayer;
     private Player[] players; 
     private static int dice;
+    private Queue<Player> queuePlayer;
     
 	public Game(int players)
 	{
-		currentPlayer = null;
 		board = makeBoard();
 		this.players = makePlayers(players);
 		BoardLocation.Link(board);		
+        queuePlayer = setUpPlayersQueue();
+        currentPlayer = queuePlayer.peek();
 	}
     
-	public void playGame()
+/*	public void playGame()
 	{
 		
-		Queue<Player> queuePlayer = setUpPlayersQueue();
 		System.out.println(queuePlayer.peek());
-// QUEUE		
-//		boolean hasWon = false;
-//		
-//		while (!hasWon) 
-//		{
-//			sortByRandomPlayer(player, diceRoll);
-//			
-//		}
 		
 		
 		dice = 3;
@@ -67,10 +61,14 @@ public class Game
 		System.out.println(players[0] + " sold 2 houses");
 		
 	}
+	*/
+	public Player getCurrentPlayer()
+	{
+	    return this.currentPlayer;	    
+	}
 	
 	private Queue<Player> setUpPlayersQueue() 
 	{
-		// TODO Auto-generated method stub
 		Queue<Player> queuePlayers = new LinkedList<>();
 		for(Player p : players)
 			queuePlayers.add(p);
@@ -161,4 +159,16 @@ public class Game
 	    
 	    return result;
 	}
+	
+	public String move()
+	{	    	    
+	    return currentPlayer.move(dice);
+	}
+    
+    public int rollDice()
+    {
+        dice = (int) (((double)Math.random()*6)+1);
+        Player.setDice(dice);
+        return dice;
+    }
 }
