@@ -10,6 +10,12 @@ public class TaxSquare extends BoardLocation
 		this.tax = tax;
 	}
 
+	public int payTax(Player player)
+	{	    
+	    player.addMoney(-tax);
+	    return tax;
+	}
+	
 	@Override
 	public String[] getPossibleActions(Player player)
 	{

@@ -9,3 +9,4 @@
 *.classpath
 /bin/
 java.policy.applet
+*.html

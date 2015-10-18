@@ -65,17 +65,16 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		playerPropertiesCombo = new JComboBox();
 		
 		// ACTION LISTENERS
-		diceRollBtn.addActionListener(new ActionListener() {            
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            { 
-                diceRollLabel.setText(diceDefaultLabel + game.rollDice()); 
-                game.getCurrentPlayer().move(Player.getDice());
-            }
+		diceRollBtn.addActionListener(e -> { 
+            diceRollLabel.setText(diceDefaultLabel + game.rollDice()); 
+            boardLocationNotificationLabel.setText(game.getCurrentPlayer().move(Player.getDice()));
+            playerLabel.setText(game.getCurrentPlayer().toString());
         });
 		
+		buyPropertyBtn.addActionListener(e -> {
+		    
+		});
 		
-		buyPropertyBtn.addActionListener(this);
 		improvePropertyBtn.addActionListener(this);
 		giveTurnBtn.addActionListener(this);
         playerPropertiesCombo.addItemListener(this);
@@ -97,28 +96,21 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	@Override
 	public void paint(Graphics g)
 	{
-	    
-		int imgScale;
-		
-		super.paint(g);
-		
-		 
+	    super.paint(g);
+		int imgScale;			
 		
 		if((getWidth() - 130) < getHeight())
 			imgScale = getWidth() - 150;
 		else
 			imgScale = getHeight() - 20;
 		
-		coordArray = getPoints(imgScale);
-		
+		coordArray = getPoints(imgScale);		
 		g.drawImage(boardImage, OFFSET_X, OFFSET_Y, imgScale, imgScale, null);
-		
 		
 		for(Point p: coordArray)
 		{
 		    g.drawImage(carImage, p.x, p.y,imgScale/20,imgScale/20 , null);
-		}
-		
+		}		
 	}
 	
 	private Point[] getPoints(int imageScale)

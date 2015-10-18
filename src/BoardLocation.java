@@ -18,6 +18,11 @@ public abstract class BoardLocation
 	
 	public abstract String[] getPossibleActions(Player player);
 
+    public int getAddress() 
+    {
+        return address;
+    }
+
     public BoardLocation getNext()
     {
         return next;

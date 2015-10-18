@@ -71,10 +71,18 @@ public class Player
         else if(location instanceof CardSquare)
         {
         	((CardSquare)(location)).reward(this);        	
-        	s = String.format("You were %s %d.\n", 
+        	s = String.format("You were %s $%d.\n", 
         	            (money-getMoney() < 0) ? "penalized" : "rewarded",
         	            Math.abs(money-getMoney()));        	
         	result += s;
+        }
+        else if (location instanceof TaxSquare)
+        {
+            result += "You have been taxed $"+((TaxSquare)location).payTax(this)+"!\n";
+        }
+        else
+        {
+            result += "You are on a corner.\n";
         }
         return result;
     }
