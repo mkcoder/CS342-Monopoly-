@@ -27,7 +27,7 @@ public class Player
              property.getOwner() == null )
         {
             properties.add(property);
-            addMoney(-property.getCost());
+            addMoney(-1 * property.getCost());
             property.setOwner(this);
             return true;
         }

@@ -12,7 +12,7 @@ public class TaxSquare extends BoardLocation
 
 	public int payTax(Player player)
 	{	    
-	    player.addMoney(-tax);
+	    player.addMoney(-1*tax);
 	    return tax;
 	}
 	
