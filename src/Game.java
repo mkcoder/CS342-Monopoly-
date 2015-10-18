@@ -67,7 +67,12 @@ public class Game
 	    return this.currentPlayer;	    
 	}
 	
-	private Queue<Player> setUpPlayersQueue() 
+	public Player[] getPlayers()
+	{
+        return players;
+    }
+
+    private Queue<Player> setUpPlayersQueue() 
 	{
 		Queue<Player> queuePlayers = new LinkedList<>();
 		for(Player p : players)
@@ -170,5 +175,15 @@ public class Game
         dice = (int) (((double)Math.random()*6)+1);
         Player.setDice(dice);
         return dice;
+    }
+
+    public void giveTurn() {
+        // TODO Auto-generated method stub
+        // Store the current player        
+        // pop the player
+        // peek the player
+        // push the player to the end        
+        queuePlayer.add(queuePlayer.poll());
+        currentPlayer = queuePlayer.peek();
     }
 }

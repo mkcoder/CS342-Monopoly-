@@ -23,11 +23,6 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	public static final String SHIP = "./src/ship.png";
 	public static final String BOOT = "./src/boot.png";
 	public static final String WHEELBARROW = "./src/wheelbarrow.png";
-
-
-
-
-
 	
 	public static final int OFFSET_X = 10;
 	public static final int OFFSET_Y = 10;
@@ -42,7 +37,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     private BufferedImage shipImage;
     private BufferedImage bootImage;
     private BufferedImage wheelImage;
-    
+        
     
     
    
@@ -94,10 +89,10 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		improvePropertyBtn = new JButton("Improve property");
 		giveTurnBtn = new JButton("Give up turn");
 		
-		diceRollLabel = new JLabel("dice");
+		diceRollLabel = new JLabel();
 		playerLabel = new JLabel(game.getCurrentPlayer().toString()); // PLAYER [$Money]		
-		playerPropertiesLabel = new JLabel("prop"); // info about current player combo property
-		boardLocationNotificationLabel = new JLabel("noti");
+		playerPropertiesLabel = new JLabel("Properties list"); // info about current player combo property
+		boardLocationNotificationLabel = new JLabel();
 		playerPropertiesCombo = new JComboBox();
 		
 		// ACTION LISTENERS
@@ -105,14 +100,41 @@ public class Applet extends JApplet implements ActionListener, ItemListener
             diceRollLabel.setText(diceDefaultLabel + game.rollDice()); 
             boardLocationNotificationLabel.setText(game.getCurrentPlayer().move(Player.getDice()));
             playerLabel.setText(game.getCurrentPlayer().toString());
+            repaint();
         });
 		
-		buyPropertyBtn.addActionListener(e -> {
-		    
+		buyPropertyBtn.addActionListener(e -> {				
+		    String text;
+		    text = "Sorry you can't purchase the property";
+		    if (game.getCurrentPlayer().getLocation() instanceof Property)
+		    {
+		        if ( game.getCurrentPlayer().buyLocation(
+		                   (Property) game.getCurrentPlayer().getLocation()) )
+		        {
+		            text = "You purchased " + game.getCurrentPlayer().getLocation().getName();
+		        }
+		    }
+            boardLocationNotificationLabel.setText(text+"\n");
 		});
 		
 		improvePropertyBtn.addActionListener(this);
-		giveTurnBtn.addActionListener(this);
+		
+		giveTurnBtn.addActionListener(e -> {
+		    game.giveTurn();
+		    // RESET THE UI
+		    playerLabel.setText(game.getCurrentPlayer().toString());
+		    playerPropertiesCombo.removeAllItems();
+		    diceRollLabel.setText("");		    
+            boardLocationNotificationLabel.setText("");
+            
+            for ( Property p : game.getCurrentPlayer().getProperties() )
+            {
+                playerPropertiesCombo.addItem(p.getName()); 
+            }
+		});
+		
+				
+		
         playerPropertiesCombo.addItemListener(this);
 
         panel.add(playerLabel);
@@ -143,13 +165,69 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		coordArray = getPoints(imgScale);		
 		g.drawImage(boardImage, OFFSET_X, OFFSET_Y, imgScale, imgScale, null);
 		
-		for(Point p: coordArray)
+		for(Player p: game.getPlayers())
 		{
-		    g.drawImage(carImage, p.x, p.y,imgScale/20,imgScale/20 , null);
-		}		
+		    drawToken(p,g,imgScale);
+		}
+		
+//		for(Point p: coordArray)
+//		{
+//		    g.drawImage(carImage, p.x, p.y,imgScale/20,imgScale/20 , null);
+//		}		
 	}
 	
-	private Point[] getPoints(int imageScale)
+	private void drawToken(Player player, Graphics g, int imgScale) 
+	{
+	    Point p;
+	    BufferedImage token;
+	    
+	    p = coordArray[player.getLocation().getAddress()];
+	    
+	    token = matchToken(player.getToken());
+	    g.drawImage(token, p.x, p.y,imgScale/20,imgScale/20 , null);
+	    
+	}
+
+    public BufferedImage matchToken(String token)
+    {
+        if(token.equals("car"))
+        {
+            return carImage;
+        }
+        else if(token.equals("boot"))
+        {
+            return bootImage;
+        }
+        else if(token.equals("top hat"))
+        {
+            return hatImage;
+        }
+        else if(token.equals("ship"))
+        {
+            return shipImage;
+        }
+        else if(token.equals("wheelbarrow"))
+        {
+            return wheelImage;
+        }
+        else if(token.equals("iron"))
+        {
+            return ironImage;
+        }
+        else if(token.equals("thimble"))
+        {
+            return thimbleImage;
+        }
+        else if(token.equals("dog"))
+        {
+            return dogImage;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    private Point[] getPoints(int imageScale)
 	{
 	    Point [] tempCoord;
 	    double divFactor;
