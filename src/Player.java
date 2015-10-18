@@ -36,12 +36,11 @@ public class Player
 
     public void sellLocation()
     {                         
-    	// TODO: not required!    
+    	// not required!
     }
     
     public String move(int n)
     {
-        String s;
         String result;        
         int money; 
         result = "";
@@ -53,37 +52,37 @@ public class Player
             if (location.getName().equals("Go"))
             {
                 addMoney(200);
-                result += "I just went passed GO.\n";
+                result += "You just went passed GO and got $200.\n";
             }
         }
 
-        if ( location instanceof Property &&
-             ((Property)(location)).isOwned())
+        if (location instanceof Property && ((Property)location).isOwned())
         {            
             ((Property)(location)).collectRent(this);
             
-            result += "I just paid " + (money-getMoney()) + " in rent to ."+((Property)location).getOwner().getToken()+"\n";
+            result += String.format("I just paid %d in rent to %s.\n", 
+            		(money - getMoney()), ((Property)location).getOwner().getToken());
         }
         else if (location instanceof Property)
         {
-            result += "This property is not owned. You can purchase it!\n";
+            result += location.getName() + "\n(Cost $" + ((Property) location).getCost() + ") is not owned.\nYou can purchase it.\n";
         }
         else if(location instanceof CardSquare)
         {
-        	((CardSquare)(location)).reward(this);        	
-        	s = String.format("You were %s $%d.\n", 
-        	            (money-getMoney() < 0) ? "penalized" : "rewarded",
-        	            Math.abs(money-getMoney()));        	
-        	result += s;
+        	((CardSquare)(location)).reward(this);  
+        	result += String.format("You were %s $%d.\n", 
+    	            (money - getMoney() < 0) ? "penalized" : "rewarded", 
+    	            Math.abs(money - getMoney()));
         }
         else if (location instanceof TaxSquare)
         {
-            result += "You have been taxed $"+((TaxSquare)location).payTax(this)+"!\n";
+            result += "You have been taxed $" + ((TaxSquare)location).payTax(this) + ".\n";
         }
         else
         {
             result += "You are on a corner.\n";
         }
+        
         return result;
     }
 
@@ -114,9 +113,7 @@ public class Player
         if (this.money<0)
         {
             declareBankruptcy();
-        }
-
-        
+        }        
     }
 
     private void declareBankruptcy()

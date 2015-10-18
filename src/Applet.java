@@ -15,21 +15,20 @@ import javax.swing.*;
 public class Applet extends JApplet implements ActionListener, ItemListener
 {
 	public static final String BOARD_FILE = "./src/mon.jpg";
-	public static final String CAR = "./src/car.png";
-	public static final String DOG = "./src/dog.png";
-	public static final String HAT = "./src/hat.png";
-	public static final String IRON = "./src/iron.png";
-	public static final String THIMBLE = "./src/thimble.png";
-	public static final String SHIP = "./src/ship.png";
-	public static final String BOOT = "./src/boot.png";
-	public static final String WHEELBARROW = "./src/wheelbarrow.png";
-	public static final String HOTEL = "./src/hotel.png";
-	public static final String HOUSE = "./src/house.png";
-	
+	public static final String CAR_FILE = "./src/car.png";
+	public static final String DOG_FILE = "./src/dog.png";
+	public static final String HAT_FILE = "./src/hat.png";
+	public static final String IRON_FILE = "./src/iron.png";
+	public static final String THIMBLE_FILE = "./src/thimble.png";
+	public static final String SHIP_FILE = "./src/ship.png";
+	public static final String BOOT_FILE = "./src/boot.png";
+	public static final String WHEELBARROW_FILE = "./src/wheelbarrow.png";
+	public static final String HOTEL_FILE = "./src/hotel.png";
+	public static final String HOUSE_FILE = "./src/house.png";	
 	
 	public static final int OFFSET_X = 10;
 	public static final int OFFSET_Y = 10;
-	public static final String diceDefaultLabel = "Dice roll result:  ";
+	public static final String DICE_DEFAULT_LABEL = "Dice roll result: ";
 	
 	private BufferedImage boardImage;
     private BufferedImage carImage;
@@ -42,147 +41,85 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     private BufferedImage wheelImage;
     private BufferedImage houseImage;
     private BufferedImage hotelImage;    
-    
-    
    
-    private Point  [] coordArray;
-    
+    private Point[] coordArray;
+    private int boardScale;
+    private int itemScale;
     private Game game;
     
 	//JComponents
-	private JButton    diceRollBtn; 	
-	private JButton    buyPropertyBtn;
-	private JButton    improvePropertyBtn;
-	private JButton    diminishPropertyBtn; 
-	private JButton    giveTurnBtn;    
-    private JLabel     diceRollLabel;
-	private JLabel     playerLabel;	
-	private JLabel     playerPropertiesLabel;
-	private JLabel     boardLocationNotificationLabel;
-    private JComboBox  playerPropertiesCombo;
+	private JButton    diceRollBtn;			  // Roll dice button
+	private JButton    buyPropertyBtn;		  // Buy property button
+	private JButton    improvePropertyBtn;    // Improve property button
+	private JButton    diminishPropertyBtn;   // Diminish property button
+	private JButton    giveTurnBtn;           // Give turn button
+    private JLabel     diceRollLabel;         // dice result label
+	private JLabel     playerLabel;	          // info about current player
+	private JLabel     playerPropertiesLabel; // info about propery chosen from combo box
+	private JTextArea  notificationText;       // feedback from curent action
+    private JComboBox  playerPropertiesCombo; // properties owned by the current player
 	
 	
 	public void init()
 	{
-	    BorderLayout layout;
-	    GridLayout gLayout;
-	    JPanel panel;
-	    
-	    gLayout = new GridLayout(10, 0);
-	    layout = new BorderLayout();
-	    panel = new JPanel(); 	
-	    
-	    panel.setLayout(gLayout);
-	    setLayout(layout);
-	   	
+		JPanel panel;	// panel for JComponents
+		int playerNum;  // number of players for the current game
+		
+		// game
+		do
+		{
+			try
+			{
+				playerNum = new Integer(JOptionPane.showInputDialog("How many players [2-8]"));
+			}
+			catch(NumberFormatException e)
+			{
+				playerNum = 0;
+			}
+		}while(playerNum < 2 || playerNum > 8); // keep asking for player num until valid
+		                                        // answer is given
+		game = new Game(playerNum);
+		
+		// images
 		boardImage = getImage(BOARD_FILE);
-		carImage = getImage(CAR);
-		dogImage = getImage(DOG);
-		hatImage = getImage(HAT);
-		ironImage = getImage(IRON);
-		thimbleImage = getImage(THIMBLE);
-		shipImage = getImage(SHIP);
-		bootImage = getImage(BOOT);
-		wheelImage = getImage(WHEELBARROW);
-		houseImage = getImage(HOUSE);
-		hotelImage = getImage(HOTEL);
+		carImage = getImage(CAR_FILE);
+		dogImage = getImage(DOG_FILE);
+		hatImage = getImage(HAT_FILE);
+		ironImage = getImage(IRON_FILE);
+		thimbleImage = getImage(THIMBLE_FILE);
+		shipImage = getImage(SHIP_FILE);
+		bootImage = getImage(BOOT_FILE);
+		wheelImage = getImage(WHEELBARROW_FILE);
+		houseImage = getImage(HOUSE_FILE);
+		hotelImage = getImage(HOTEL_FILE);
 		
-		
-		
-		game = new Game(new Integer(JOptionPane.showInputDialog("how many players")));
-		
-		diceRollBtn = new JButton("Roll Dice!");
+	    // jcomponents		
+		diceRollBtn = new JButton("Roll Dice");
 		buyPropertyBtn = new JButton("Buy property");
 		improvePropertyBtn = new JButton("Improve property");
 		diminishPropertyBtn = new JButton("Diminish property");
 		giveTurnBtn = new JButton("Give up turn");
 		
 		diceRollLabel = new JLabel();
-		playerLabel = new JLabel(game.getCurrentPlayer().toString()); // PLAYER [$Money]		
-		playerPropertiesLabel = new JLabel("Properties list"); // info about current player combo property
-		boardLocationNotificationLabel = new JLabel();
-		playerPropertiesCombo = new JComboBox();
+		playerLabel = new JLabel(game.getCurrentPlayer().toString());
+		playerPropertiesLabel = new JLabel("Properties list");
+		notificationText = new JTextArea();
+		notificationText.setEditable(false);
+		notificationText.setBackground(getContentPane().getBackground());
 		
-		// ACTION LISTENERS
-		diceRollBtn.addActionListener(e -> { 
-            diceRollLabel.setText(diceDefaultLabel + game.rollDice()); 
-            boardLocationNotificationLabel.setText(game.getCurrentPlayer().move(Player.getDice()));
-            playerLabel.setText(game.getCurrentPlayer().toString());
-            repaint();
-        });
+		playerPropertiesCombo = new JComboBox();		
+		playerPropertiesCombo.addItemListener(this);
 		
-		buyPropertyBtn.addActionListener(e -> {				
-		    String text;
-		    text = "Sorry you can't purchase the property";
-		    if (game.getCurrentPlayer().getLocation() instanceof Property)
-		    {
-		        if ( game.getCurrentPlayer().buyLocation(
-		                   (Property) game.getCurrentPlayer().getLocation()) )
-		        {
-		            text = "You purchased " + game.getCurrentPlayer().getLocation().getName();
-		            playerPropertiesCombo.addItem(game.getCurrentPlayer().getLocation().getName());
-		        }
-		    }
-		    
-            boardLocationNotificationLabel.setText(text+"\n");
-            playerLabel.setText(game.getCurrentPlayer().toString());
-		});
-		
-		improvePropertyBtn.addActionListener(e -> {
-		    Property p;
-		    String text;
-		    
-		    text = "You cannot improve the lot!";
-		    p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
-		    
-		    if(p instanceof Lot && ((Lot) p).improve())
-		      {
-		           text ="You have improved your lot!\n";
-		           repaint();
-		      }
-		    
-		    boardLocationNotificationLabel.setText(text);
-		    playerLabel.setText(game.getCurrentPlayer().toString());
-		});
-		
-		diminishPropertyBtn.addActionListener(e -> {
-            Property p;
-            String text;
-            
-            text = "You cannot diminish the lot!";
-            p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
-            
-            if(p instanceof Lot && ((Lot)p).diminish())
-              {
-                   text ="You have diminished your lot!\n";
-                   repaint();
-              }
-            
-            boardLocationNotificationLabel.setText(text);
-            playerLabel.setText(game.getCurrentPlayer().toString());
-        });
-		
-		giveTurnBtn.addActionListener(e -> {
-		    game.giveTurn();
-		    // RESET THE UI
-		    playerLabel.setText(game.getCurrentPlayer().toString());
-		    playerPropertiesCombo.removeAllItems();
-		    diceRollLabel.setText("");		    
-            boardLocationNotificationLabel.setText("");
-            
-            for ( Property p : game.getCurrentPlayer().getProperties() )
-            {
-                playerPropertiesCombo.addItem(p.getName()); 
-            }
-		});
-		
-				
-		
-        playerPropertiesCombo.addItemListener(this);
-
-        panel.add(playerLabel);
+		// layout
+	    setLayout(new BorderLayout());
+	    
+	    panel = new JPanel();
+	    panel.setLayout(new GridLayout(10, 0));
+	    panel.setPreferredSize(new Dimension(220, 600));
+	    
+	    panel.add(playerLabel);
         panel.add(diceRollLabel);
-        panel.add(boardLocationNotificationLabel);
+        panel.add(notificationText);
         panel.add(diceRollBtn);
         panel.add(buyPropertyBtn);
         panel.add(improvePropertyBtn);
@@ -191,46 +128,105 @@ public class Applet extends JApplet implements ActionListener, ItemListener
         panel.add(playerPropertiesLabel);
         panel.add(playerPropertiesCombo);
         
-        add(panel, layout.EAST);
-        
+        add(panel, BorderLayout.EAST);
+		
+		// dice roll listener
+		diceRollBtn.addActionListener(e -> 
+		{ 
+            diceRollLabel.setText(DICE_DEFAULT_LABEL + game.rollDice()); 
+            notificationText.setText(game.getCurrentPlayer().move(Player.getDice()).toString());
+            playerLabel.setText(game.getCurrentPlayer().toString());
+            repaint();
+        });
+		
+		// buy property listener
+		buyPropertyBtn.addActionListener(e -> 
+		{				
+		    String text;
+		    
+		    text = "Sorry you can't purchase the property";
+		    if (game.getCurrentPlayer().getLocation() instanceof Property &&
+		        game.getCurrentPlayer().buyLocation((Property)game.getCurrentPlayer().getLocation()))
+		    {
+		            text = "You purchased " + game.getCurrentPlayer().getLocation().getName();
+		            playerPropertiesCombo.addItem(game.getCurrentPlayer().getLocation().getName());
+		    }
+		    
+		    notificationText.setText(text);
+            playerLabel.setText(game.getCurrentPlayer().toString());
+		});
+		
+		// improve property listener
+		improvePropertyBtn.addActionListener(e -> 
+		{
+		    Property p;
+		    String text;
+		    
+		    text = "You cannot improve the lot!";
+		    p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+		    
+		    if(p instanceof Lot && ((Lot) p).improve())
+		    {
+		    	text ="You have improved your lot!\n";
+		        repaint();
+		    }
+		    
+		    notificationText.setText(text);
+		    playerLabel.setText(game.getCurrentPlayer().toString());
+		});
+		
+		// diminish listener
+		diminishPropertyBtn.addActionListener(e -> 
+		{
+            Property p;
+            String text;
+            
+            text = "You cannot diminish the lot!";
+            p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+            
+            if(p instanceof Lot && ((Lot)p).diminish())
+            {
+            	text ="You have diminished your lot!\n";
+                repaint();
+            }
+            
+            notificationText.setText(text);
+            playerLabel.setText(game.getCurrentPlayer().toString());
+        });
+		
+		// give turn listener
+		giveTurnBtn.addActionListener(e -> 
+		{
+		    game.giveTurn();
+		    
+		    // reset the ui
+		    playerLabel.setText(game.getCurrentPlayer().toString());		    
+		    diceRollLabel.setText("");		    
+		    notificationText.setText("");
+            
+            playerPropertiesCombo.removeAllItems();
+            for(Property p : game.getCurrentPlayer().getProperties()) // populate combo with
+            														  // properties
+            {
+                playerPropertiesCombo.addItem(p.getName());
+            }
+		});
 	}
 	
 	@Override
 	public void paint(Graphics g)
-	{
-		int imgScale;
-		Point p;
-		
-		
+	{		
 	    super.paint(g);
-
-		if((getWidth() - 130) < getHeight())
-			imgScale = getWidth() - 150;
-		else
-			imgScale = getHeight() - 20;
-		
-		coordArray = getPoints(imgScale);		
-		g.drawImage(boardImage, OFFSET_X, OFFSET_Y, imgScale, imgScale, null);
-		
-		
+	    
+	    setScale();
+	    coordArray = getPoints(boardScale);		
+		g.drawImage(boardImage, OFFSET_X, OFFSET_Y, boardScale, boardScale, null);
 		
 		for(BoardLocation b: game.getBoard())
 		{
 		    if(b instanceof Lot)
 		    {
-		        if (((Lot) b).getRentIndex() < 5)
-		        {
-		            for(int i = 0; i < ((Lot) b).getRentIndex(); i++ )
-		            {
-		                p = coordArray[b.getAddress()];
-		                g.drawImage(houseImage,p.x , p.y+(i-1)*imgScale/60, imgScale/20,imgScale/20,null);
-		            }
-		        }
-		        else
-		        {
-		            p = coordArray[b.getAddress()];
-		            g.drawImage(hotelImage,p.x , p.y+imgScale/40, imgScale/20,imgScale/20,null);
-		        }
+		    	drawHotelsAndHouses((Lot)b, g);
 		    }
 		}
 		
@@ -238,15 +234,40 @@ public class Applet extends JApplet implements ActionListener, ItemListener
         {
 		    if(!player.isBankrupt())
 		    {
-		        drawToken(player,g,imgScale);
+		        drawToken(player,g,boardScale);
 		    }
         }
+	}
+	
+	private void setScale()
+	//
+	// POST: modifies boardScale and itemScale
+	{
+		if((getWidth() - 230) < getHeight())
+			boardScale = getWidth() - 250;
+		else
+			boardScale = getHeight() - 20;
 		
+		itemScale = boardScale/20;
+	}
+	
+	private void drawHotelsAndHouses(Lot lot, Graphics g)
+	{
+		Point p;
 		
-//		for(Point p: coordArray)
-//		{
-//		    g.drawImage(carImage, p.x, p.y,imgScale/20,imgScale/20 , null);
-//		}		
+		if (lot.getRentIndex() < 5)
+        {
+            for(int i = 0; i < lot.getRentIndex(); i++ )
+            {
+                p = coordArray[lot.getAddress()];
+                g.drawImage(houseImage, p.x, p.y + (i - 1)*boardScale/60, itemScale, itemScale, null);
+            }
+        }
+        else
+        {
+            p = coordArray[lot.getAddress()];
+            g.drawImage(hotelImage,p.x , p.y+boardScale/40, itemScale, itemScale, null);
+        }
 	}
 	
 	private void drawToken(Player player, Graphics g, int imgScale) 
@@ -254,10 +275,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	    Point p;
 	    BufferedImage token;
 	    
-	    p = coordArray[player.getLocation().getAddress()];
-	    
+	    p = coordArray[player.getLocation().getAddress()];	    
 	    token = matchToken(player.getToken());
-	    g.drawImage(token, p.x, p.y,imgScale/20,imgScale/20 , null);
+	    g.drawImage(token, p.x, p.y, itemScale, itemScale, null);
 	    
 	}
 
@@ -300,6 +320,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
             return null;
         }
     }
+    
     private Point[] getPoints(int imageScale)
 	{
 	    Point [] tempCoord;
@@ -308,27 +329,30 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	    tempCoord = new Point[40];
 	    divFactor = (imageScale/10) * (0.825);
 	    
-	    for(int i = 0; i < 11 ;i++)
+	    for(int i = 0; i < 11 ;i++) // bottom edge
 	    {
-	        tempCoord[i] = new Point( (int) (imageScale-divFactor*i -divFactor*1.5),(int) (imageScale-divFactor));
+	        tempCoord[i] = new Point((int)(imageScale - divFactor*i - divFactor*1.5),
+	        		                 (int) (imageScale - divFactor));
 	    }
 	    
-	    for (int i = 11; i < 21; i++)
+	    for (int i = 11; i < 21; i++) // left edge
 	    {
-	        tempCoord[i] = new Point((int) divFactor/2,(int) (imageScale-divFactor*(i-10)-divFactor*1.5));
+	        tempCoord[i] = new Point((int)(divFactor/2),
+	        		                 (int)(imageScale - divFactor*(i  -10) - divFactor*1.5));
         }
 	    
-	    for (int i = 21; i < 31; i++)
+	    for (int i = 21; i < 31; i++) // top edge
         {
-            tempCoord[i] = new Point((int) (divFactor*(i-20) +divFactor*1),(int) (divFactor/2));
+            tempCoord[i] = new Point((int)(divFactor*(i - 20) + divFactor),(int)(divFactor/2));
         }
 	    
-	    for (int i = 31; i < 40; i++)
+	    for (int i = 31; i < 40; i++) // right edge
         {
-            tempCoord[i] = new Point((int) (imageScale-divFactor),(int) (divFactor*(i-30)+divFactor*.9));
+            tempCoord[i] = new Point((int)(imageScale - divFactor),
+            		                 (int)(divFactor*(i - 30) + divFactor*0.9));
         }
 	    
-	    for(Point p: tempCoord)
+	    for(Point p: tempCoord) // add offsets to all points
 	    {
 	        p.x = p.x + OFFSET_X;
 	        p.y = p.y + OFFSET_Y;
@@ -338,16 +362,20 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	}
 	
 	public BufferedImage getImage(String fileName)
+	// PRE: fileName must be initialized
+	// POST: FCTVAL: loaded image
 	{
-		BufferedImage img;
+		BufferedImage img; // resulting loaded image
 		
-		img = null;
 		try 
 		{
 			img = ImageIO.read(new File(fileName));
 		} 
 		catch (IOException e)
 		{
+			JOptionPane.showMessageDialog(null, "Could not open " + fileName, "ERROR", 
+					JOptionPane.ERROR_MESSAGE);
+			img = null;
 		}
 		
 		return img;
@@ -356,16 +384,11 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-//        if (e.getSource() == diceRollBtn) 
-//        {
-//            
-//        }
     }
     
     @Override
     public void itemStateChanged(ItemEvent e)
-    {
-        
+    {        
     }
 
 }

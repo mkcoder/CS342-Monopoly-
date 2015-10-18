@@ -1,8 +1,5 @@
 package src;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class BoardLocation
 {
     protected final String name;								// piece name     
@@ -36,7 +33,7 @@ public abstract class BoardLocation
     @Override
     public String toString()
     {
-    	return "BoardLocation: " + name;
+    	return "Location: " + name + ".";
     }
     
     public static void Link(BoardLocation[] board)

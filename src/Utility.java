@@ -14,18 +14,19 @@ public class Utility extends Property
 	{
 		int rent;		
 		
-		rent = other.owner == this.owner ? player.getDice() * 10 : player.getDice() * 4;
+		rent = other.owner == this.owner ? Player.getDice() * 10 : Player.getDice() * 4;
 		player.transferMoneyTo(owner, rent);
 	}
 	
-	public void setOther(Utility other)
+	public static void setOther(Utility water, Utility electric)
 	{
-		this.other = other;
+		water.other = electric;
+		electric.other = water;
 	}
 
 	@Override
-	public String[] getPossibleActions(Player player) {
-		// TODO Auto-generated method stub
+	public String[] getPossibleActions(Player player)
+	{
 		return null;
 	}
 	

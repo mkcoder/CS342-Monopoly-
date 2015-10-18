@@ -63,6 +63,6 @@ public class Lot extends Property
 	@Override
 	public String toString()
 	{
-		return super.toString() + " color: " + color;
+		return super.toString() + " Color: " + color + ".";
 	}
 }
