@@ -27,22 +27,31 @@ public class Lot extends Property
 		player.transferMoneyTo(owner, payment);
 	}
 	
-	public void improve()
+	public boolean improve()
 	{
 		if(owner != null && owner.getMoney() >= improveCost && rentIndex < rent.length - 1)
 		{
 			rentIndex++;
-			owner.addMoney(-improveCost);
+			owner.addMoney(-1*improveCost);
+			return true;
 		}
+		return false;
 	}
 	
-	public void diminish()
+	public int getRentIndex()
+	{
+        return rentIndex;
+    }
+
+    public boolean diminish()
 	{
 		if(owner != null && rentIndex > 0)
 		{
 			rentIndex--;
 			owner.addMoney(improveCost/2);
+			return true;
 		}
+		return false;
 	}
 
 	@Override

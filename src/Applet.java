@@ -23,6 +23,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	public static final String SHIP = "./src/ship.png";
 	public static final String BOOT = "./src/boot.png";
 	public static final String WHEELBARROW = "./src/wheelbarrow.png";
+	public static final String HOTEL = "./src/hotel.png";
+	public static final String HOUSE = "./src/house.png";
+	
 	
 	public static final int OFFSET_X = 10;
 	public static final int OFFSET_Y = 10;
@@ -37,7 +40,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     private BufferedImage shipImage;
     private BufferedImage bootImage;
     private BufferedImage wheelImage;
-        
+    private BufferedImage houseImage;
+    private BufferedImage hotelImage;    
     
     
    
@@ -48,7 +52,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	//JComponents
 	private JButton    diceRollBtn; 	
 	private JButton    buyPropertyBtn;
-	private JButton    improvePropertyBtn;    
+	private JButton    improvePropertyBtn;
+	private JButton    diminishPropertyBtn; 
 	private JButton    giveTurnBtn;    
     private JLabel     diceRollLabel;
 	private JLabel     playerLabel;	
@@ -79,6 +84,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		shipImage = getImage(SHIP);
 		bootImage = getImage(BOOT);
 		wheelImage = getImage(WHEELBARROW);
+		houseImage = getImage(HOUSE);
+		hotelImage = getImage(HOTEL);
 		
 		
 		
@@ -87,6 +94,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		diceRollBtn = new JButton("Roll Dice!");
 		buyPropertyBtn = new JButton("Buy property");
 		improvePropertyBtn = new JButton("Improve property");
+		diminishPropertyBtn = new JButton("Diminish property");
 		giveTurnBtn = new JButton("Give up turn");
 		
 		diceRollLabel = new JLabel();
@@ -112,12 +120,47 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		                   (Property) game.getCurrentPlayer().getLocation()) )
 		        {
 		            text = "You purchased " + game.getCurrentPlayer().getLocation().getName();
+		            playerPropertiesCombo.addItem(game.getCurrentPlayer().getLocation().getName());
 		        }
 		    }
+		    
             boardLocationNotificationLabel.setText(text+"\n");
+            playerLabel.setText(game.getCurrentPlayer().toString());
 		});
 		
-		improvePropertyBtn.addActionListener(this);
+		improvePropertyBtn.addActionListener(e -> {
+		    Property p;
+		    String text;
+		    
+		    text = "You cannot improve the lot!";
+		    p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+		    
+		    if(p instanceof Lot && ((Lot) p).improve())
+		      {
+		           text ="You have improved your lot!\n";
+		           repaint();
+		      }
+		    
+		    boardLocationNotificationLabel.setText(text);
+		    playerLabel.setText(game.getCurrentPlayer().toString());
+		});
+		
+		diminishPropertyBtn.addActionListener(e -> {
+            Property p;
+            String text;
+            
+            text = "You cannot diminish the lot!";
+            p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+            
+            if(p instanceof Lot && ((Lot)p).diminish())
+              {
+                   text ="You have diminished your lot!\n";
+                   repaint();
+              }
+            
+            boardLocationNotificationLabel.setText(text);
+            playerLabel.setText(game.getCurrentPlayer().toString());
+        });
 		
 		giveTurnBtn.addActionListener(e -> {
 		    game.giveTurn();
@@ -143,6 +186,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
         panel.add(diceRollBtn);
         panel.add(buyPropertyBtn);
         panel.add(improvePropertyBtn);
+        panel.add(diminishPropertyBtn);
         panel.add(giveTurnBtn);
         panel.add(playerPropertiesLabel);
         panel.add(playerPropertiesCombo);
@@ -154,9 +198,12 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	@Override
 	public void paint(Graphics g)
 	{
-	    super.paint(g);
-		int imgScale;			
+		int imgScale;
+		Point p;
 		
+		
+	    super.paint(g);
+
 		if((getWidth() - 130) < getHeight())
 			imgScale = getWidth() - 150;
 		else
@@ -165,10 +212,36 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		coordArray = getPoints(imgScale);		
 		g.drawImage(boardImage, OFFSET_X, OFFSET_Y, imgScale, imgScale, null);
 		
-		for(Player p: game.getPlayers())
+		
+		
+		for(BoardLocation b: game.getBoard())
 		{
-		    drawToken(p,g,imgScale);
+		    if(b instanceof Lot)
+		    {
+		        if (((Lot) b).getRentIndex() < 5)
+		        {
+		            for(int i = 0; i < ((Lot) b).getRentIndex(); i++ )
+		            {
+		                p = coordArray[b.getAddress()];
+		                g.drawImage(houseImage,p.x , p.y+(i-1)*imgScale/60, imgScale/20,imgScale/20,null);
+		            }
+		        }
+		        else
+		        {
+		            p = coordArray[b.getAddress()];
+		            g.drawImage(hotelImage,p.x , p.y+imgScale/40, imgScale/20,imgScale/20,null);
+		        }
+		    }
 		}
+		
+		for(Player player: game.getPlayers())
+        {
+		    if(!player.isBankrupt())
+		    {
+		        drawToken(player,g,imgScale);
+		    }
+        }
+		
 		
 //		for(Point p: coordArray)
 //		{

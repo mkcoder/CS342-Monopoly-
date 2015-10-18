@@ -43,4 +43,6 @@ public abstract class Property extends BoardLocation
     	player = owner == null ? "no one" : owner.getToken();
     	return super.toString() + " costs $" + cost + " owned by " + player;
     }
+    
+ 
 }

@@ -94,7 +94,7 @@ public class Player
 
     public void addMoney(int money)
     {
-        setMoney(getMoney()+money);
+        setMoney(this.money+money);
     }
 
     public void transferMoneyTo(Player player, int money)
@@ -110,17 +110,36 @@ public class Player
 
     public void setMoney(int money)
     {
-        if (this.money+money<0)
+        this.money = money;
+        if (this.money<0)
         {
             declareBankruptcy();
         }
 
-        this.money = money;
+        
     }
 
     private void declareBankruptcy()
     {
-        this.bankrupt = true;
+        for(Property p: properties)
+        {
+            if(p instanceof Lot &&  ((Lot) p).getRentIndex() > 0)
+            {
+                while(((Lot) p).getRentIndex() > 0 && this.money < 0)
+                {
+                    ((Lot) p).diminish();
+                }
+            }
+        }
+        
+        if(this.money < 0)
+        {
+            this.bankrupt = true;
+            for(Property p: properties)
+            {
+                p.setOwner(null);
+            }
+        }
     }
 
     public BoardLocation getLocation()

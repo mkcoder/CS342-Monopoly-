@@ -29,6 +29,8 @@ public class Game
     
 /*	public void playGame()
 	{
+	
+	
 		
 		System.out.println(queuePlayer.peek());
 		
@@ -67,7 +69,11 @@ public class Game
 	    return this.currentPlayer;	    
 	}
 	
-	public Player[] getPlayers()
+	public BoardLocation[] getBoard() {
+        return board;
+    }
+
+    public Player[] getPlayers()
 	{
         return players;
     }
@@ -164,7 +170,19 @@ public class Game
 	    
 	    return result;
 	}
-	
+	public Property getProperty(String property)
+	{
+	    
+	    for(BoardLocation p: board)
+	    {
+	        if(p.getName().equals(property))
+	        {
+	            return (Property)p;
+	        }
+	    }
+        return null;
+	    
+	}
 	public String move()
 	{	    	    
 	    return currentPlayer.move(dice);
@@ -182,8 +200,25 @@ public class Game
         // Store the current player        
         // pop the player
         // peek the player
-        // push the player to the end        
+        // push the player to the end 
+       
+       if(currentPlayer.isBankrupt())
+       {
+           queuePlayer.poll();
+       }
         queuePlayer.add(queuePlayer.poll());
         currentPlayer = queuePlayer.peek();
     }
+    
+    public boolean checkBankruptcy(Player player)
+    {
+        if(player.isBankrupt())
+        {
+            
+        }
+        
+        return false;
+    }
+    
+    
 }
