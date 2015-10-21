@@ -1,4 +1,8 @@
-//maciek
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: Applet class that models applet which contains entire front end (UI)
+//              for the project
 package src;
 
 import java.awt.*;
@@ -15,40 +19,40 @@ import javax.swing.*;
 
 public class Applet extends JApplet implements ActionListener, ItemListener
 {
-	public static final String BOARD_FILE = "./src/mon.jpg";
-	public static final String CAR_FILE = "./src/car.png";
-	public static final String DOG_FILE = "./src/dog.png";
-	public static final String HAT_FILE = "./src/hat.png";
-	public static final String IRON_FILE = "./src/iron.png";
-	public static final String THIMBLE_FILE = "./src/thimble.png";
-	public static final String SHIP_FILE = "./src/ship.png";
-	public static final String BOOT_FILE = "./src/boot.png";
-	public static final String WHEELBARROW_FILE = "./src/wheelbarrow.png";
-	public static final String HOTEL_FILE = "./src/hotel.png";
-	public static final String HOUSE_FILE = "./src/house.png";	
+	// file paths
+	public static final String BOARD_FILE = "./src/mon.jpg";       // board file name
+	public static final String CAR_FILE = "./src/car.png";         // car token file name
+	public static final String DOG_FILE = "./src/dog.png";         // dog token file name
+	public static final String HAT_FILE = "./src/hat.png";         // hat token file name
+	public static final String IRON_FILE = "./src/iron.png";       // iron token file name
+	public static final String THIMBLE_FILE = "./src/thimble.png"; // thimble token file name
+	public static final String SHIP_FILE = "./src/ship.png";       // ship token file name
+	public static final String BOOT_FILE = "./src/boot.png";       // boot token file name
+	public static final String WHEELBARROW_FILE = "./src/wheelbarrow.png"; // wheel token file name
+	public static final String HOTEL_FILE = "./src/hotel.png";     // hotel file name
+	public static final String HOUSE_FILE = "./src/house.png";     // house file name
 	
-	public static final int OFFSET_X = 10;
-	public static final int OFFSET_Y = 10;
-	public static final String DICE_DEFAULT_LABEL = "Dice roll result: ";
+	// other static finals
+	public static final int OFFSET_X = 10; // x position of the board in applet in pixels from 0,0
+	public static final int OFFSET_Y = 10; // y position of the board in applet in pixels from 0,0
+	public static final int PANEL_WIDTH = 230; // width of the JPanel storing JComponents
+	public static final int ITEM_SCALE = 20; // size ratio of the board to tokens/houses
+	public static final int MIN_PANEL_WIDTH = 220; // min width of the jpanel
 	
-	private BufferedImage boardImage;
-    private BufferedImage carImage;
-    private BufferedImage dogImage;
-    private BufferedImage hatImage;
-    private BufferedImage ironImage;
-    private BufferedImage thimbleImage;
-    private BufferedImage shipImage;
-    private BufferedImage bootImage;
-    private BufferedImage wheelImage;
-    private BufferedImage houseImage;
-    private BufferedImage hotelImage;    
-   
-    private Point[] coordArray;
-    private int boardScale;
-    private int itemScale;
-    private Game game;
+	// images
+	private BufferedImage boardImage; // image of the board
+    private BufferedImage carImage;   // image of the car token
+    private BufferedImage dogImage;   // image of the dog token
+    private BufferedImage hatImage;   // image of the hat token
+    private BufferedImage ironImage;  // image og the iron token
+    private BufferedImage thimbleImage; // image of the thimble token
+    private BufferedImage shipImage;  // image of the ship token
+    private BufferedImage bootImage;  // image of the boot token
+    private BufferedImage wheelImage; // image of the wheelbarrow token
+    private BufferedImage houseImage; // image of the house
+    private BufferedImage hotelImage; // image of the hotel   
     
-	//JComponents
+	// JComponents
 	private JButton    diceRollBtn;			  // Roll dice button
 	private JButton    buyPropertyBtn;		  // Buy property button
 	private JButton    improvePropertyBtn;    // Improve property button
@@ -56,17 +60,22 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	private JButton    giveTurnBtn;           // Give turn button
     private JLabel     diceRollLabel;         // dice result label
 	private JLabel     playerLabel;	          // info about current player
-	private JLabel     playerPropertiesLabel; // info about propery chosen from combo box
-	private JTextArea  notificationText;       // feedback from curent action
-    private JComboBox  playerPropertiesCombo; // properties owned by the current player
-	
+	private JLabel     propertyLabel;         // info about propery chosen from combo box
+	private JTextArea  notificationText;      // feedback from curent action
+    private JComboBox  propertiesCombo;       // properties owned by the current player
+
+    // other members
+    private Point[] coordArray; // cooridnates of all game fields in pixels from 0,0
+    private int boardScale;     // size of the board in pixels
+    private int itemScale;      // size of the tokens, houses and hotels in pixels
+    private Game game;          // game object
 	
 	public void init()
+	// POST: initializes JApplet
 	{
 		JPanel panel;	// panel for JComponents
 		int playerNum;  // number of players for the current game
-		
-		// game
+				
 		do
 		{
 			try
@@ -103,20 +112,20 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		
 		diceRollLabel = new JLabel();
 		playerLabel = new JLabel(game.getCurrentPlayer().toString());
-		playerPropertiesLabel = new JLabel("Properties list");
+		propertyLabel = new JLabel("Properties list");
 		notificationText = new JTextArea();
 		notificationText.setEditable(false);
 		notificationText.setBackground(getContentPane().getBackground());
 		
-		playerPropertiesCombo = new JComboBox();		
-		playerPropertiesCombo.addItemListener(this);
+		propertiesCombo = new JComboBox();		
+		propertiesCombo.addItemListener(this);
 		
 		// layout
 	    setLayout(new BorderLayout());
 	    
 	    panel = new JPanel();
 	    panel.setLayout(new GridLayout(10, 0));
-	    panel.setPreferredSize(new Dimension(220, 600));
+	    panel.setPreferredSize(new Dimension(MIN_PANEL_WIDTH, 600));
 	    
 	    panel.add(playerLabel);
         panel.add(diceRollLabel);
@@ -126,85 +135,91 @@ public class Applet extends JApplet implements ActionListener, ItemListener
         panel.add(improvePropertyBtn);
         panel.add(diminishPropertyBtn);
         panel.add(giveTurnBtn);
-        panel.add(playerPropertiesLabel);
-        panel.add(playerPropertiesCombo);
+        panel.add(propertyLabel);
+        panel.add(propertiesCombo);
         
         add(panel, BorderLayout.EAST);
 		
-		// dice roll listener
+        // listeners
 		diceRollBtn.addActionListener(this);
-		
-		// buy property listener
 		buyPropertyBtn.addActionListener(this);
-		
-		// improve property listener
 		improvePropertyBtn.addActionListener(this);
-		
-		// diminish listener
 		diminishPropertyBtn.addActionListener(this);
-		
-		// give turn listener
 		giveTurnBtn.addActionListener(this);
 	}
 	
 	@Override
 	public void paint(Graphics g)
+	// POST: draws pictures and UI
+	//       updates boardScale and itemScale members based on current applet size
+	//       updates coordArray member based on boardScale
 	{		
 	    super.paint(g);
 	    
 	    setScale();
-	    coordArray = getPoints(boardScale);		
+	    coordArray = getPoints();		
 		g.drawImage(boardImage, OFFSET_X, OFFSET_Y, boardScale, boardScale, null);
 		
-		for(BoardLocation b: game.getBoard())
+		for(BoardLocation b: game.getBoard()) // draw houses and hotels
 		{
-		    if(b instanceof Lot)
+		    if(b instanceof Lot) // check for houses only for lots
 		    {
 		    	drawHotelsAndHouses((Lot)b, g);
 		    }
 		}
 		
-		for(Player player: game.getPlayers())
+		for(Player p: game.getPlayers()) // draw player tokens
         {
-		    if(!player.isBankrupt())
+		    if(!p.isBankrupt()) // draw tokens for players that are not broke
 		    {
-		        drawToken(player,g,boardScale);
+		        drawToken(p,g,boardScale);
 		    }
         }
 	}
 	
 	private void setScale()
-	//
-	// POST: modifies boardScale and itemScale
+	// POST: updates boardScale and itemScale members based on current applet size
 	{
-		if((getWidth() - 230) < getHeight())
-			boardScale = getWidth() - 250;
-		else
-			boardScale = getHeight() - 20;
+		if((getWidth() - PANEL_WIDTH - OFFSET_X) < getHeight()) // allow board to be at most
+			                                                    // applet minus room for JPanel
+			boardScale = getWidth() - PANEL_WIDTH - OFFSET_X;
+		else                                                    // allow board to be at most
+			                                                    // applet height
+			boardScale = getHeight() - OFFSET_Y;
 		
-		itemScale = boardScale/20;
+		itemScale = boardScale/ITEM_SCALE;
 	}
 	
 	private void drawHotelsAndHouses(Lot lot, Graphics g)
+	// PRE: lot must be initialized
+	//      g must be Graphics object from paint method
+	//      coordArray class member must be initialized
+	// POST: draws houses and hotels for lot lot
 	{
-		Point p;
+		Point p;     // screen coordinate of lot in pixels
 		
-		if (lot.getRentIndex() < 5)
+		p = coordArray[lot.getAddress()];
+		
+		if (lot.getRentIndex() < 5) // draw houses if lot level is less than 5
         {
-            for(int i = 0; i < lot.getRentIndex(); i++ )
-            {
-                p = coordArray[lot.getAddress()];
-                g.drawImage(houseImage, p.x, p.y + (i - 1)*boardScale/60, itemScale, itemScale, null);
+            for(int i = 0; i < lot.getRentIndex(); i++ ) // draw as many houses as the level
+            	                                         // of the lot
+            {                
+                g.drawImage(houseImage, p.x, p.y + (i - 1)*itemScale/3, 
+                		itemScale, itemScale, null);
             }
         }
-        else
+        else // draw hotel otherwise
         {
-            p = coordArray[lot.getAddress()];
-            g.drawImage(hotelImage,p.x , p.y+boardScale/40, itemScale, itemScale, null);
+            g.drawImage(hotelImage,p.x , p.y+itemScale/2, itemScale, itemScale, null);
         }
 	}
 	
-	private void drawToken(Player player, Graphics g, int imgScale) 
+	private void drawToken(Player player, Graphics g, int imgScale)
+	// PRE: player must be initialized
+	//      imgScale must be greater than 0
+	//      g must be Graphics object from paint method
+	// POST: draws token for player player
 	{
 	    Point p;
 	    BufferedImage token;
@@ -216,77 +231,87 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	}
 
     public BufferedImage matchToken(String token)
+    // PRE: token must be a valid token name
+    //      valid token names: car, boot, top hat, ship, wheelbarrow, iron, thimble, dog
+    // POST:FCVAL: image that matches valid token name or null otherwise
     {
-        if(token.equals("car"))
+        if(token.equals("car")) // match "car" to carImage
         {
             return carImage;
         }
-        else if(token.equals("boot"))
+        else if(token.equals("boot")) // match "boot" to bootImage
         {
             return bootImage;
         }
-        else if(token.equals("top hat"))
+        else if(token.equals("top hat")) // match "top hat" to hatImage
         {
             return hatImage;
         }
-        else if(token.equals("ship"))
+        else if(token.equals("ship")) // match "ship" to shipImage
         {
             return shipImage;
         }
-        else if(token.equals("wheelbarrow"))
+        else if(token.equals("wheelbarrow")) // match "wheelbarrow" to wheelImage
         {
             return wheelImage;
         }
-        else if(token.equals("iron"))
+        else if(token.equals("iron")) // match "iron" to ironImage
         {
             return ironImage;
         }
-        else if(token.equals("thimble"))
+        else if(token.equals("thimble")) // match "thimble" to thimbleImage
         {
             return thimbleImage;
         }
-        else if(token.equals("dog"))
+        else if(token.equals("dog")) // match "dog" to dogImage
         {
             return dogImage;
         }
-        else
+        else // return null if nothing matches
         {
             return null;
         }
     }
     
-    private Point[] getPoints(int imageScale)
+    private Point[] getPoints()
+    // PRE: boardScale class member must be initialized
+    // POST: FCTVAL: returns array of Points that represent cooridnates of board fields
+    //               for current boardScale
 	{
-	    Point [] tempCoord;
-	    double divFactor;
+	    Point [] tempCoord; // result array of coordinates of board fields
+	    double divFactor;   // distance between points on an edge
 	 
 	    tempCoord = new Point[40];
-	    divFactor = (imageScale/10) * (0.825);
+	    divFactor = (boardScale/10) * (0.825);
 	    
 	    for(int i = 0; i < 11 ;i++) // bottom edge
 	    {
-	        tempCoord[i] = new Point((int)(imageScale - divFactor*i - divFactor*1.5),
-	        		                 (int) (imageScale - divFactor));
+	    	// for x coords walk edge right to left, offset all x and y properly
+	        tempCoord[i] = new Point((int)(boardScale - divFactor*i - divFactor*1.5),
+	        		                 (int) (boardScale - divFactor));
 	    }
 	    
 	    for (int i = 11; i < 21; i++) // left edge
 	    {
+	    	// for y coords walk edge bottom to top, offset all x and y properly
 	        tempCoord[i] = new Point((int)(divFactor/2),
-	        		                 (int)(imageScale - divFactor*(i  -10) - divFactor*1.5));
+	        		                 (int)(boardScale - divFactor*(i - 10) - divFactor*1.5));
         }
 	    
 	    for (int i = 21; i < 31; i++) // top edge
         {
+	    	// for x coords walk edge left to right, offset all x and y properly
             tempCoord[i] = new Point((int)(divFactor*(i - 20) + divFactor),(int)(divFactor/2));
         }
 	    
 	    for (int i = 31; i < 40; i++) // right edge
         {
-            tempCoord[i] = new Point((int)(imageScale - divFactor),
+	    	// for y coords walk edge top to bottom, offset all x and y properly
+            tempCoord[i] = new Point((int)(boardScale - divFactor),
             		                 (int)(divFactor*(i - 30) + divFactor*0.9));
         }
 	    
-	    for(Point p: tempCoord) // add offsets to all points
+	    for(Point p: tempCoord) // add board offsets to all points
 	    {
 	        p.x = p.x + OFFSET_X;
 	        p.y = p.y + OFFSET_Y;
@@ -317,79 +342,101 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 
     @Override
     public void actionPerformed(ActionEvent e)
+    // POST: handles all buttons clicks
     {
-    	String text;
-    	Property prop;
+    	String text;   // string used to build message for labels 
+    	Property prop; // auxilary Property to make code shorter
+    	Player player; // current player
     	
-    	if(e.getSource() == diceRollBtn)
-		{ 
-            diceRollLabel.setText(DICE_DEFAULT_LABEL + game.rollDice()); 
-            notificationText.setText(game.getCurrentPlayer().move(Player.getDice()).toString());
-            playerLabel.setText(game.getCurrentPlayer().toString());
+    	player = game.getCurrentPlayer();
+    	
+    	if(e.getSource() == diceRollBtn) // roll dice button clicked
+		{
+    		text = Integer.toString(game.rollDice());
+            diceRollLabel.setText("Dice roll result" + text);
+            text = player.move(Player.getDice());
+            notificationText.setText(text);
+            playerLabel.setText(player.toString());
             repaint();
         }
-    	else if(e.getSource() == buyPropertyBtn)
+    	else if(e.getSource() == buyPropertyBtn) // Buy property button clicked
 		{		    
-		    text = "Sorry you can't purchase the property";
-		    if (game.getCurrentPlayer().getLocation() instanceof Property &&
-		        game.getCurrentPlayer().buyLocation((Property)game.getCurrentPlayer().getLocation()))
+		    text = "Sorry you can't purchase that";
+		    
+		    if (player.getLocation() instanceof Property &&
+		    	player.buyLocation((Property)player.getLocation())) // property purchased
 		    {
-		            text = "You purchased " + game.getCurrentPlayer().getLocation().getName();
-		            playerPropertiesCombo.addItem(game.getCurrentPlayer().getLocation().getName());
+		            text = "You purchased " + player.getLocation().getName();
+		            propertiesCombo.addItem(player.getLocation().getName());
 		    }
 		    
 		    notificationText.setText(text);
-            playerLabel.setText(game.getCurrentPlayer().toString());
+            playerLabel.setText(player.toString());
 		}    	
-    	else if(e.getSource() == improvePropertyBtn)
+    	else if(e.getSource() == improvePropertyBtn) // Improve property button clicked
 		{
 		    text = "You cannot improve the lot!";
-		    prop = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+		    prop = game.getProperty(propertiesCombo.getSelectedItem().toString());
 		    
-		    if(prop instanceof Lot && ((Lot) prop).improve())
+		    if(prop instanceof Lot && ((Lot) prop).improve()) // improved successfully
 		    {
-		    	text ="You have improved your lot!\n";
+		    	text = "You have improved your lot!\n";
 		        repaint();
 		    }
 		    
 		    notificationText.setText(text);
-		    playerLabel.setText(game.getCurrentPlayer().toString());
+		    playerLabel.setText(player.toString());
 		}
-    	else if(e.getSource() == diminishPropertyBtn)
+    	else if(e.getSource() == diminishPropertyBtn) // Diminish property button clicked
 		{            
             text = "You cannot diminish the lot!";
-            prop = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+            prop = game.getProperty(propertiesCombo.getSelectedItem().toString());
             
-            if(prop instanceof Lot && ((Lot)prop).diminish())
+            if(prop instanceof Lot && ((Lot)prop).diminish()) // diminished successfully
             {
             	text ="You have diminished your lot!\n";
                 repaint();
             }
             
             notificationText.setText(text);
-            playerLabel.setText(game.getCurrentPlayer().toString());
+            playerLabel.setText(player.toString());
         }
-    	else if(e.getSource() == giveTurnBtn)
+    	else if(e.getSource() == giveTurnBtn) // Give turn button clicked
 		{
 		    game.giveTurn();
+		    player = game.getCurrentPlayer();
 		    
 		    // reset the ui
-		    playerLabel.setText(game.getCurrentPlayer().toString());		    
+		    playerLabel.setText(player.toString());		    
 		    diceRollLabel.setText("");		    
 		    notificationText.setText("");
+		    propertyLabel.setText("");
             
-            playerPropertiesCombo.removeAllItems();
-            for(Property p : game.getCurrentPlayer().getProperties()) // populate combo with
-            														  // properties
+            propertiesCombo.removeAllItems();
+            for(Property p : player.getProperties()) // populate combo with properties
             {
-                playerPropertiesCombo.addItem(p.getName());
+                propertiesCombo.addItem(p.getName());
             }
 		}
     }
     
     @Override
     public void itemStateChanged(ItemEvent e)
-    {        
+    {
+    	String text;   // message built for propLabel
+    	Property prop; // selected property
+    	
+    	if(e.getSource() == propertiesCombo && 
+    	   propertiesCombo.getSelectedItem() != null) // combo state changed and it's not empty
+    	{
+    		prop = game.getProperty(propertiesCombo.getSelectedItem().toString());
+    		
+    		text = propertiesCombo.getSelectedItem().toString() + "\n";
+    		text += "Improvement cost: " + prop.getImproveCost() + "\n";
+    		text += "Gain from diminishing: " + prop.getImproveCost()/2 + "\n";
+    				
+    		propertyLabel.setText(text);
+    	}
     }
 
 }
