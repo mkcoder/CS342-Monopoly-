@@ -1,3 +1,4 @@
+//maciek
 package src;
 
 import java.awt.*;
@@ -131,86 +132,19 @@ public class Applet extends JApplet implements ActionListener, ItemListener
         add(panel, BorderLayout.EAST);
 		
 		// dice roll listener
-		diceRollBtn.addActionListener(e -> 
-		{ 
-            diceRollLabel.setText(DICE_DEFAULT_LABEL + game.rollDice()); 
-            notificationText.setText(game.getCurrentPlayer().move(Player.getDice()).toString());
-            playerLabel.setText(game.getCurrentPlayer().toString());
-            repaint();
-        });
+		diceRollBtn.addActionListener(this);
 		
 		// buy property listener
-		buyPropertyBtn.addActionListener(e -> 
-		{				
-		    String text;
-		    
-		    text = "Sorry you can't purchase the property";
-		    if (game.getCurrentPlayer().getLocation() instanceof Property &&
-		        game.getCurrentPlayer().buyLocation((Property)game.getCurrentPlayer().getLocation()))
-		    {
-		            text = "You purchased " + game.getCurrentPlayer().getLocation().getName();
-		            playerPropertiesCombo.addItem(game.getCurrentPlayer().getLocation().getName());
-		    }
-		    
-		    notificationText.setText(text);
-            playerLabel.setText(game.getCurrentPlayer().toString());
-		});
+		buyPropertyBtn.addActionListener(this);
 		
 		// improve property listener
-		improvePropertyBtn.addActionListener(e -> 
-		{
-		    Property p;
-		    String text;
-		    
-		    text = "You cannot improve the lot!";
-		    p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
-		    
-		    if(p instanceof Lot && ((Lot) p).improve())
-		    {
-		    	text ="You have improved your lot!\n";
-		        repaint();
-		    }
-		    
-		    notificationText.setText(text);
-		    playerLabel.setText(game.getCurrentPlayer().toString());
-		});
+		improvePropertyBtn.addActionListener(this);
 		
 		// diminish listener
-		diminishPropertyBtn.addActionListener(e -> 
-		{
-            Property p;
-            String text;
-            
-            text = "You cannot diminish the lot!";
-            p = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
-            
-            if(p instanceof Lot && ((Lot)p).diminish())
-            {
-            	text ="You have diminished your lot!\n";
-                repaint();
-            }
-            
-            notificationText.setText(text);
-            playerLabel.setText(game.getCurrentPlayer().toString());
-        });
+		diminishPropertyBtn.addActionListener(this);
 		
 		// give turn listener
-		giveTurnBtn.addActionListener(e -> 
-		{
-		    game.giveTurn();
-		    
-		    // reset the ui
-		    playerLabel.setText(game.getCurrentPlayer().toString());		    
-		    diceRollLabel.setText("");		    
-		    notificationText.setText("");
-            
-            playerPropertiesCombo.removeAllItems();
-            for(Property p : game.getCurrentPlayer().getProperties()) // populate combo with
-            														  // properties
-            {
-                playerPropertiesCombo.addItem(p.getName());
-            }
-		});
+		giveTurnBtn.addActionListener(this);
 	}
 	
 	@Override
@@ -384,6 +318,73 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+    	String text;
+    	Property prop;
+    	
+    	if(e.getSource() == diceRollBtn)
+		{ 
+            diceRollLabel.setText(DICE_DEFAULT_LABEL + game.rollDice()); 
+            notificationText.setText(game.getCurrentPlayer().move(Player.getDice()).toString());
+            playerLabel.setText(game.getCurrentPlayer().toString());
+            repaint();
+        }
+    	else if(e.getSource() == buyPropertyBtn)
+		{		    
+		    text = "Sorry you can't purchase the property";
+		    if (game.getCurrentPlayer().getLocation() instanceof Property &&
+		        game.getCurrentPlayer().buyLocation((Property)game.getCurrentPlayer().getLocation()))
+		    {
+		            text = "You purchased " + game.getCurrentPlayer().getLocation().getName();
+		            playerPropertiesCombo.addItem(game.getCurrentPlayer().getLocation().getName());
+		    }
+		    
+		    notificationText.setText(text);
+            playerLabel.setText(game.getCurrentPlayer().toString());
+		}    	
+    	else if(e.getSource() == improvePropertyBtn)
+		{
+		    text = "You cannot improve the lot!";
+		    prop = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+		    
+		    if(prop instanceof Lot && ((Lot) prop).improve())
+		    {
+		    	text ="You have improved your lot!\n";
+		        repaint();
+		    }
+		    
+		    notificationText.setText(text);
+		    playerLabel.setText(game.getCurrentPlayer().toString());
+		}
+    	else if(e.getSource() == diminishPropertyBtn)
+		{            
+            text = "You cannot diminish the lot!";
+            prop = game.getProperty(playerPropertiesCombo.getSelectedItem().toString());
+            
+            if(prop instanceof Lot && ((Lot)prop).diminish())
+            {
+            	text ="You have diminished your lot!\n";
+                repaint();
+            }
+            
+            notificationText.setText(text);
+            playerLabel.setText(game.getCurrentPlayer().toString());
+        }
+    	else if(e.getSource() == giveTurnBtn)
+		{
+		    game.giveTurn();
+		    
+		    // reset the ui
+		    playerLabel.setText(game.getCurrentPlayer().toString());		    
+		    diceRollLabel.setText("");		    
+		    notificationText.setText("");
+            
+            playerPropertiesCombo.removeAllItems();
+            for(Property p : game.getCurrentPlayer().getProperties()) // populate combo with
+            														  // properties
+            {
+                playerPropertiesCombo.addItem(p.getName());
+            }
+		}
     }
     
     @Override
