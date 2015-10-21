@@ -206,9 +206,8 @@ public class Game
 	    return currentPlayer.move(dice);
 	}
     
-    public int rollDice2()
-	// POST:FCTVAL: ???????????
-    
+    public void rollDice()
+	// POST: rolls DICE_COUNT dices
     {
     	dice = 0;
     	for(int i=0;i<DICE_COUNT;i++) // dice
@@ -216,7 +215,6 @@ public class Game
     		dice += (int) (((double)Math.random()*6)+1);
     	}
         Player.setDice(dice);
-        return dice;
     }
 
     public void giveTurn()

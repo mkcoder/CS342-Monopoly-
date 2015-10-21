@@ -60,8 +60,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	private JButton    giveTurnBtn;           // Give turn button
     private JLabel     diceRollLabel;         // dice result label
 	private JLabel     playerLabel;	          // info about current player
-	private JLabel     propertyLabel;         // info about propery chosen from combo box
+	private JTextArea  propertyText;          // info about propery chosen from combo box
 	private JTextArea  notificationText;      // feedback from curent action
+	private JTextArea  historyText;           // feedback from curent action
     private JComboBox  propertiesCombo;       // properties owned by the current player
 
     // other members
@@ -87,7 +88,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 				playerNum = 0;
 			}
 		}while(playerNum < 2 || playerNum > 8); // keep asking for player num until valid
-		                                        // answer is given
+		                                        // value is given
 		game = new Game(playerNum);
 		
 		// images
@@ -112,7 +113,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		
 		diceRollLabel = new JLabel();
 		playerLabel = new JLabel(game.getCurrentPlayer().toString());
-		propertyLabel = new JLabel("Properties list");
+		propertyText = new JTextArea("1\n2\n3\n4\n5\n6\n7\n8\n");
+		propertyText.setEditable(false);
+		propertyText.setBackground(getContentPane().getBackground());
 		notificationText = new JTextArea();
 		notificationText.setEditable(false);
 		notificationText.setBackground(getContentPane().getBackground());
@@ -127,6 +130,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	    panel.setLayout(new GridLayout(10, 0));
 	    panel.setPreferredSize(new Dimension(MIN_PANEL_WIDTH, 600));
 	    
+	    panel.add(historyText);
 	    panel.add(playerLabel);
         panel.add(diceRollLabel);
         panel.add(notificationText);
@@ -135,7 +139,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
         panel.add(improvePropertyBtn);
         panel.add(diminishPropertyBtn);
         panel.add(giveTurnBtn);
-        panel.add(propertyLabel);
+        panel.add(propertyText);
         panel.add(propertiesCombo);
         
         add(panel, BorderLayout.EAST);
@@ -352,7 +356,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	
     	if(e.getSource() == diceRollBtn) // roll dice button clicked
 		{
-    		text = Integer.toString(game.rollDice());
+    		text = "";
+    		//text = Integer.toString(game.rollDice());
             diceRollLabel.setText("Dice roll result" + text);
             text = player.move(Player.getDice());
             notificationText.setText(text);
@@ -410,7 +415,10 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		    playerLabel.setText(player.toString());		    
 		    diceRollLabel.setText("");		    
 		    notificationText.setText("");
-		    propertyLabel.setText("");
+		    propertyText.setText("");
+		    
+		    //history
+		    historyText.append("****" + player.getToken() + "****\n");
             
             propertiesCombo.removeAllItems();
             for(Property p : player.getProperties()) // populate combo with properties
@@ -438,7 +446,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	    		text += "Gain from diminishing: " + ((Lot) prop).getImproveCost()/2 + "\n";
     		}
     				
-    		propertyLabel.setText(text);
+    		propertyText.setText(text);
     	}
     }
 
