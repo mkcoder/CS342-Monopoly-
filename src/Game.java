@@ -1,4 +1,9 @@
-//maciek
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: Game class that models main game object that stores all back end data
+//              such as players and board fields, manages game state, and implements functions that
+//              connect the back end with the front end
 package src;
 
 import java.util.LinkedList;
@@ -6,79 +11,73 @@ import java.util.Queue;
 
 public class Game
 {
-    private final BoardLocation[] board;
-    private Player currentPlayer;
-    private Player[] players; 
-    private static int dice;
-    private Queue<Player> queuePlayer;
+	public static final boolean DEMO_MODE = false; // flag that enabled/disables demo mode
+    private final BoardLocation[] board;           // array of all board locations
+    private Player currentPlayer;                  // current player
+    private Player[] players;                      // array of all players
+    private int dice;                              // current dice value
+    private Queue<Player> queuePlayer;             // queue of players, maintains the order
     
 	public Game(int playerNum)
+	// PRE: playerNum must be between 2 and 8
+	// POST: initializes board, players, currentPlayer, queuePlayer class members
+	//       in case of demo mode initializes the game to run in demo mode
 	{
+		if(DEMO_MODE) // demo mode active
+		{
+			playerNum = 2;
+		}
 		board = makeBoard();
 		this.players = makePlayers(playerNum);
 		BoardLocation.Link(board);
         queuePlayer = setUpPlayersQueue();
         currentPlayer = queuePlayer.peek();
+        if(DEMO_MODE) // demo mode active
+		{
+			initDemoMode();
+		}
 	}
-    
-/*	public void playGame()
+	
+	private void initDemoMode()
+	// PRE: players and board must be initialized
+	// POST: 12 to 18 properties are randomly distributed among players
+	//       some houses/hotels are placed on distributed lots
 	{
 	
-	
-		
-		System.out.println(queuePlayer.peek());
-		
-		
-		dice = 3;
-		players[0].move(dice);
-		
-		if(players[0].buyLocation((Property) players[0].getLocation()))
-			System.out.println(players[0] + " bought " + players[0].getLocation());
-		
-		System.out.println(players[1] + " moves 3");
-		players[1].move(dice);
-		System.out.println(players[0] + " collected rent from " + players[1]);
-		
-		System.out.println(players[0] + " moves 4");
-		
-		dice = 4;
-		players[0].move(dice);
-		System.out.println(players[0] + " got rewarded");
-		
-		System.out.println(players[0] + " buys 2 houses");
-		((Lot) players[0].getProperties().get(0)).improve();
-		((Lot) players[0].getProperties().get(0)).improve();
-		System.out.println(players[1] + " makes a cycle");
-		dice = 15;
-		players[1].move(dice);
-		System.out.println(players[0] + " collected rent from " + players[1]);		
-		((Lot) players[0].getProperties().get(0)).diminish();
-		((Lot) players[0].getProperties().get(0)).diminish();
-		System.out.println(players[0] + " sold 2 houses");
-		
 	}
-	*/
+	
 	public Player getCurrentPlayer()
+	// POST:FCTVAL: this.currentPlayer
 	{
-	    return this.currentPlayer;	    
+	    return currentPlayer;	    
 	}
 	
-	public BoardLocation[] getBoard() {
+	public BoardLocation[] getBoard() 
+	// POST:FCTVAL: this.board
+	{
         return board;
     }
 
     public Player[] getPlayers()
+    // POST:FCTVAL: this.players
 	{
         return players;
     }
 
-    private Queue<Player> setUpPlayersQueue() 
+    private Queue<Player> setUpPlayersQueue()
+    // PRE: players class member must be initialized
+    // POST: FCTVAL: returns initialized queue of players
+    //       first player is chosen randomly
 	{
+    	int rand; // random number 
+    	
 		Queue<Player> queuePlayers = new LinkedList<>();
-		for(Player p : players)
+		for(Player p : players) // add all players to queue
 			queuePlayers.add(p);
-		int firstPlayer = (int)(Math.random()*players.length);
-		for ( int i = 0; i < firstPlayer; i++ )
+		
+		rand = (int)(Math.random()*players.length); // choose random number between [0,#players-1]
+		
+		for ( int i = 0; i < rand; i++ ) // enqueue dequeue random number of times
 		{
 			queuePlayers.add(queuePlayers.poll());
 		}
@@ -86,7 +85,9 @@ public class Game
 		return queuePlayers;
 	}
 
-	public void printPlayers() 
+	public void printPlayers()
+	// PRE: players class member must be initialized
+	// POST: prints all players to stdout
 	{
 		for (Player p : players) 
 		{
@@ -94,7 +95,9 @@ public class Game
 		}		
 	}
 
-	public void printBoardInfo() 
+	public void printBoardInfo()
+	// PRE: players class members must be initialized
+	// POST: prints all board locations to stdout
 	{
 		for ( BoardLocation b : board ) 
 		{
@@ -103,6 +106,8 @@ public class Game
 	}
 	
 	private BoardLocation[] makeBoard()
+	// POST: FCTVAL: array of board locations of monopoly game
+	//               fully initialized
     {
 		BoardLocation[] result;
 		
@@ -156,7 +161,9 @@ public class Game
         return result;
     }
 
-	private Player[] makePlayers(int pCount) 
+	private Player[] makePlayers(int pCount)
+	// PRE:
+	// POST:FCTVAL:
 	{
 	    String[] token;
 	    Player[] result;
@@ -173,6 +180,8 @@ public class Game
 	}
 	
 	public Property getProperty(String property)
+	// PRE:
+	// POST:FCTVAL:
 	{	    
 	    for(BoardLocation p: board)
 	    {
@@ -186,18 +195,24 @@ public class Game
 	}
 	
 	public String move()
+	// PRE:
+	// POST:FCTVAL:
 	{	    	    
 	    return currentPlayer.move(dice);
 	}
     
     public int rollDice()
+    // PRE:
+	// POST:FCTVAL:
     {
         dice = (int) (((double)Math.random()*6)+1);
         Player.setDice(dice);
         return dice;
     }
 
-    public void giveTurn() 
+    public void giveTurn()
+    // PRE:
+	// POST:
     {
     	if(currentPlayer.isBankrupt())
     	{
@@ -209,6 +224,8 @@ public class Game
     }
     
     public boolean checkBankruptcy(Player player)
+    // PRE:
+	// POST:FCTVAL:
     {
         if(player.isBankrupt())
         {
