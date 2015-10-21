@@ -11,6 +11,7 @@ import java.util.Queue;
 
 public class Game
 {
+	public static final int DICE_COUNT = 2;        // how many dice to roll
 	public static final boolean DEMO_MODE = false; // flag that enabled/disables demo mode
     private final BoardLocation[] board;           // array of all board locations
     private Player currentPlayer;                  // current player
@@ -162,8 +163,9 @@ public class Game
     }
 
 	private Player[] makePlayers(int pCount)
-	// PRE:
-	// POST:FCTVAL:
+	// PRE: pCount has to be between 2 and 8
+	//      board class member has to be initialized
+	// POST:FCTVAL: returns initialized array of players
 	{
 	    String[] token;
 	    Player[] result;
@@ -180,8 +182,9 @@ public class Game
 	}
 	
 	public Property getProperty(String property)
-	// PRE:
-	// POST:FCTVAL:
+	// PRE: property should be a name of a property on the board
+	// POST:FCTVAL: return Property which names matches property arg
+	//              returns null otherwise
 	{	    
 	    for(BoardLocation p: board)
 	    {
@@ -195,24 +198,31 @@ public class Game
 	}
 	
 	public String move()
-	// PRE:
-	// POST:FCTVAL:
+	// PRE: currentPlayer class member must be initialized
+	//      dice must be rolled before calling this func
+	// POST: calls move() on current player
+	//       FCTVAL: returns the message of what happened on the field where player moved to
 	{	    	    
 	    return currentPlayer.move(dice);
 	}
     
-    public int rollDice()
-    // PRE:
-	// POST:FCTVAL:
+    public int rollDice2()
+	// POST:FCTVAL: ???????????
+    
     {
-        dice = (int) (((double)Math.random()*6)+1);
+    	dice = 0;
+    	for(int i=0;i<DICE_COUNT;i++) // dice
+    	{
+    		dice += (int) (((double)Math.random()*6)+1);
+    	}
         Player.setDice(dice);
         return dice;
     }
 
     public void giveTurn()
-    // PRE:
-	// POST:
+    // PRE: currentPlayer and queuePlayer must be initialized
+	// POST: gives turn to the next player in the queue
+    //       puts the currentPlayer at the end
     {
     	if(currentPlayer.isBankrupt())
     	{
@@ -223,6 +233,8 @@ public class Game
     	currentPlayer = queuePlayer.peek();
     }
     
+    // ?????????????????????????????????????????????????????
+    // ?????????????????????????????????????????????????????
     public boolean checkBankruptcy(Player player)
     // PRE:
 	// POST:FCTVAL:
