@@ -6,14 +6,14 @@ import java.util.*;
 public class Player
 {
     // DATA DICTIONARY
-	private static final int INITIAL_MONEY = 1500;
-	private static int dice = 0;			// dice value
+    private static final int INITIAL_MONEY = 1500;
+    private static int dice = 0;			// dice value
     private final String token;				// token
     private int money;						// how much money you have
     private BoardLocation location;			// the current player location
     private List<Property> properties;		// the properties we own
     private boolean bankrupt;				// is the person bankrupt
-    
+
     public Player(String token, BoardLocation go)
     {
         this.money = INITIAL_MONEY;
@@ -21,11 +21,11 @@ public class Player
         this.token = token;
         this.properties = new ArrayList<>();
     }
-    
+
     public boolean buyLocation(Property property)
     {
         if ( property.getCost() <= money &&
-             property.getOwner() == null )
+                property.getOwner() == null )
         {
             properties.add(property);
             addMoney(-1 * property.getCost());
@@ -36,17 +36,17 @@ public class Player
     }
 
     public void sellLocation()
-    {                         
-    	// not required!
+    {
+        // not required!
     }
-    
+
     public String move(int n)
     {
-        String result;        
-        int money; 
+        String result;
+        int money;
         result = "";
         money = this.getMoney();
-                
+
         for (int i = 0; i < n; i++)
         {
             location = location.getNext();
@@ -58,11 +58,11 @@ public class Player
         }
 
         if (location instanceof Property && ((Property)location).isOwned())
-        {            
+        {
             ((Property)(location)).collectRent(this);
-            
-            result += String.format("I just paid %d in rent to %s.\n", 
-            		(money - getMoney()), ((Property)location).getOwner().getToken());
+
+            result += String.format("I just paid %d in rent to %s.\n",
+                    (money - getMoney()), ((Property)location).getOwner().getToken());
         }
         else if (location instanceof Property)
         {
@@ -70,10 +70,10 @@ public class Player
         }
         else if(location instanceof CardSquare)
         {
-        	((CardSquare)(location)).reward(this);  
-        	result += String.format("You were %s $%d.\n", 
-    	            (money - getMoney() < 0) ? "penalized" : "rewarded", 
-    	            Math.abs(money - getMoney()));
+            ((CardSquare)(location)).reward(this);
+            result += String.format("You were %s $%d.\n",
+                    (money - getMoney() < 0) ? "penalized" : "rewarded",
+                    Math.abs(money - getMoney()));
         }
         else if (location instanceof TaxSquare)
         {
@@ -83,7 +83,7 @@ public class Player
         {
             result += "You are on a corner.\n";
         }
-        
+
         return result;
     }
 
@@ -114,7 +114,7 @@ public class Player
         if (this.money<0)
         {
             declareBankruptcy();
-        }        
+        }
     }
 
     private void declareBankruptcy()
@@ -129,7 +129,7 @@ public class Player
                 }
             }
         }
-        
+
         if(this.money < 0)
         {
             this.bankrupt = true;
@@ -155,26 +155,26 @@ public class Player
         return bankrupt;
     }
 
-	public static int getDice()
-	{
-		return dice;
-	}
-	
-	public static void setDice(int dice) {
+    public static int getDice()
+    {
+        return dice;
+    }
+
+    public static void setDice(int dice) {
         Player.dice = dice;
     }
 
     public String getToken()
-	{
-		return token;
-	}
-	
-	@Override
-	public String toString()
-	{
-		if(!bankrupt)
-			return "Player: " + token + " has $" + money;
-		else
-			return "Player: " + token + " is broke :(";
-	}
+    {
+        return token;
+    }
+
+    @Override
+    public String toString()
+    {
+        if(!bankrupt)
+            return "Player: " + token + " has $" + money;
+        else
+            return "Player: " + token + " is broke :(";
+    }
 }
