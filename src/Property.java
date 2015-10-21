@@ -9,11 +9,11 @@ public abstract class Property extends BoardLocation
 
     public Property(String name, int address, int cost)
     {
-        super(name,address);
+    	super(name,address);
         this.cost = cost;
         this.owner = null;
     }
-
+    
     public abstract void collectRent(Player player);
 
     public int getCost()
@@ -35,15 +35,15 @@ public abstract class Property extends BoardLocation
     {
         return owner != null;
     }
-
+    
     @Override
     public String toString()
     {
-        String player;
-
-        player = owner == null ? "no one" : owner.getToken();
-        return super.toString() + " Cost $" + cost + ". Owned by " + player + ".";
+    	String player;
+    	
+    	player = owner == null ? "no one" : owner.getToken();
+    	return super.toString() + " Cost $" + cost + ". Owned by " + player + ".";
     }
-
-
+    
+ 
 }
