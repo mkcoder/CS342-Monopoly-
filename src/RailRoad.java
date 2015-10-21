@@ -1,4 +1,3 @@
-//khalil
 package src;
 
 public class RailRoad extends Property

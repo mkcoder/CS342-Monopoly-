@@ -1,4 +1,3 @@
-//habib
 package src;
 
 public class CornerSquare extends BoardLocation
