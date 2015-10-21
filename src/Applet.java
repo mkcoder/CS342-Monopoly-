@@ -432,8 +432,11 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     		prop = game.getProperty(propertiesCombo.getSelectedItem().toString());
     		
     		text = propertiesCombo.getSelectedItem().toString() + "\n";
-    		text += "Improvement cost: " + prop.getImproveCost() + "\n";
-    		text += "Gain from diminishing: " + prop.getImproveCost()/2 + "\n";
+    		if(prop instanceof Lot)
+    		{
+	    		text += "Improvement cost: " + ((Lot) prop).getImproveCost() + "\n";
+	    		text += "Gain from diminishing: " + ((Lot) prop).getImproveCost()/2 + "\n";
+    		}
     				
     		propertyLabel.setText(text);
     	}
