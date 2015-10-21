@@ -28,21 +28,19 @@ public abstract class Property extends BoardLocation
 
     public Player getOwner()
     // PRE: player is initalized
-	// POST: FCTVAL: 
+	// POST: FCTVAL: returns the owner of the class
     {
         return owner;
     }
 
     public void setOwner(Player owner)
-    // PRE:
-	// POST:FCTVAL:
+	// POST:FCTVAL: sets the owner to owner
     {
         this.owner = owner;
     }
 
     public boolean isOwned()
-    // PRE:
-	// POST:FCTVAL:
+	// POST:FCTVAL: is this owned by someone
     {
         return owner != null;
     }
@@ -50,7 +48,8 @@ public abstract class Property extends BoardLocation
     @Override
     public String toString()
     // PRE:
-	// POST:FCTVAL:
+	// POST:FCTVAL: a string that describes the property and the cost of it
+    //   and if it is owned by anyone
     {
     	String player;
     	
