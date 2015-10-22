@@ -77,10 +77,16 @@ public class Player
         return passedGo;
     }
 
-    public List<Property> getProperties()
+    public String[] getProperties()
     // POST:FCTVAL = the properties owned by the player
     {
-        return properties;
+    	String[] props;
+    	
+    	props = new String[properties.size()];
+    	for(int i=0;i<properties.size();i++)
+    		props[i] = properties.get(i).getName();
+    		
+        return props;
     }
 
     public void addMoney(int money)
@@ -137,6 +143,7 @@ public class Player
         
         if(this.money < 0)     //the player is still, broke
         {
+        	properties = null;
             this.bankrupt = true;
             for(Property p: properties)  //Set each of the player's properties to null
             {

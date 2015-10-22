@@ -67,13 +67,13 @@ public class Game
                     propertyPurchased++;
                 }
                 
-                if ( player.getProperties().size() > 3 )   // do i have 3 props and a factor of 2
+                if ( player.getProperties().length > 3 )   // do i have 3 props and a factor of 2
                 {
-                    for ( Property p : player.getProperties())          // for all my properties
+                    for ( String str : player.getProperties())          // for all my properties
                     {
-                        if ( p instanceof Lot )     	   // is p a lot than imrpove it
+                        if ( getProperty(str) instanceof Lot )     	   // is p a lot than imrpove it
                         {
-                        	((Lot) p).improve();
+                        	((Lot) getProperty(str)).improve();
                         }
                     }
                 }
@@ -283,17 +283,28 @@ public class Game
         return result;
     }
     
-    public int rollDice()    
+    public boolean rollDice()    
     // POST: rolls DICE_COUNT dices
     //       FCTVAL: dice value rolled
     {
+    	int current; // current throw
+    	boolean doubleThrow; // flag for double
+    	
         dice = 0;
+        doubleThrow = false;
+        
         for(int i=0;i<DICE_COUNT;i++) // dice
         {
-            dice += (int) (((double)Math.random()*6)+1);
+        	current = (int) (((double)Math.random()*6)+1);
+        	if(current == dice) // is double
+        	{
+        		doubleThrow = true;
+        	}
+        	dice += current;
         }
         Player.setDice(dice);
-        return dice;
+        
+        return doubleThrow;
     }
 
     public void giveTurn()
@@ -301,26 +312,12 @@ public class Game
     // POST: gives turn to the next player in the queue
     //       puts the currentPlayer at the end
     {
-        if(currentPlayer.isBankrupt())
+        if(currentPlayer.isBankrupt()) // remove bankrupt player from queue
         {
             queuePlayer.poll();
         }
 
         queuePlayer.add(queuePlayer.poll());
         currentPlayer = queuePlayer.peek();
-    }
-    
-    // ?????????????????????????????????????????????????????
-    // ?????????????????????????????????????????????????????
-    public boolean checkBankruptcy(Player player)
-    // PRE:
-    // POST:FCTVAL:
-    {
-        if(player.isBankrupt())
-        {
-            
-        }
-        
-        return false;
     }
 }

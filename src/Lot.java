@@ -40,7 +40,9 @@ public class Lot extends Property
 	
 	public boolean improve()
 	// PRE: It is assumed that the player has met the necessary requirement in order to build
-	//      the houses and hotels. 
+	//      the houses and hotels
+    //      The player is improving their properties evenly meaning they improve their lots one house at a time 
+    //      and has bought the all the properties in their color group
 	// POST:   FCTVAL = a boolean that is true if lot has been improved, false o.w
 	{
 		if(owner != null && owner.getMoney() >= improveCost && // the owner has enough money and  
@@ -61,6 +63,7 @@ public class Lot extends Property
 
     public boolean diminish()
     // PRE: The owner has at least one house
+    //      The player can only diminish their properties evenly
     // POST: Half the improveCost will be added to the player's balance
 	{
 		if(owner != null && rentIndex > 0) // The property is owned and has at least 1 house
@@ -76,6 +79,23 @@ public class Lot extends Property
     // POST: FCTVAL = the int improveCost
     {
         return improveCost;
+    }
+    
+    public String getHousingLevel()
+    // POST: FCTVAL: returns a string of how many houses/hotels are there 
+    {
+    	if(rentIndex == 0) // no houses
+    	{
+    		return "No houses";
+    	}
+    	if(rentIndex < 5) // 1-4 houses
+    	{
+    		return rentIndex + " houses";
+    	}
+    	else // 1 hotel
+    	{
+    		return "1 hotel";
+    	}
     }
 
 	@Override

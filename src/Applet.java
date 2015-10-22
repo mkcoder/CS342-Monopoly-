@@ -56,6 +56,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     
 	// JComponents
 	private JButton    diceRollBtn;			  // Roll dice button
+	private JButton    endBtn;			      // End game button
 	private JButton    buyPropertyBtn;		  // Buy property button
 	private JButton    improvePropertyBtn;    // Improve property button
 	private JButton    diminishPropertyBtn;   // Diminish property button
@@ -65,6 +66,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	private JTextArea  propertyText;          // info about propery chosen from combo box
 	private JTextArea  notificationText;      // feedback from curent action
 	private JTextArea  historyText;           // text area that stores the gameplay history
+	private JTextArea  playersText;           // text area that holds info about all players
     private JComboBox  propertiesCombo;       // properties owned by the current player
 
     // other members
@@ -79,6 +81,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		JPanel basePanel;	// panel for all components
 		JPanel historyPanel;// panel for history
 		JScrollPane scroll; // scroll panel for history text area
+		JScrollPane playerScroll; // scroll panel for players
 		JPanel playerPanel; // panel for player info and roll dice
 		JPanel actionPanel; // panel for buying and info about current action
 		JPanel propPanel;   // panel for managinf properties
@@ -133,6 +136,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		// player panel
 		diceRollBtn = new JButton("Roll Dice");
 		giveTurnBtn = new JButton("Give up turn");
+		endBtn = new JButton("End game");
 		diceRollLabel = new JLabel();
 		diceRollLabel.setPreferredSize(new Dimension(PANEL_WIDTH-20, 20));
 		playerLabel = new JLabel(game.getCurrentPlayer().toString());
@@ -142,6 +146,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		playerPanel.add(diceRollLabel);
 		playerPanel.add(diceRollBtn);
 		playerPanel.add(giveTurnBtn);
+		playerPanel.add(endBtn);
 		
 		// action panel		
 		buyPropertyBtn = new JButton("Buy property");
@@ -150,9 +155,19 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		notificationText.setEditable(false);
 		notificationText.setBackground(getContentPane().getBackground());
 		
+		playersText = new JTextArea();
+		playersText.setEditable(false);		
+		playersText.setBackground(new Color(255,255,245));
+		playerScroll = new JScrollPane(playersText);
+		playerScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		playerScroll.setPreferredSize(new Dimension(PANEL_WIDTH-20, 90));
+		updatePlayersInfo();
+		
 		actionPanel = new JPanel();		
 		actionPanel.add(buyPropertyBtn);
 		actionPanel.add(notificationText);
+		actionPanel.add(new JLabel("Information about players"));
+		actionPanel.add(playerScroll);
 		
 		// property panel
 		improvePropertyBtn = new JButton("Improve property");
@@ -193,6 +208,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		diminishPropertyBtn.addActionListener(this);
 		giveTurnBtn.addActionListener(this);
 		propertiesCombo.addItemListener(this);
+		endBtn.addActionListener(this);
 	}
 	
 	@Override
@@ -387,6 +403,22 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		return img;
 	}
 	
+	public void updatePlayersInfo()
+	// PRE: playersText and players must be initialized
+	// POST: populates playersText with correct info about players
+	{
+		String text; // string built for playersText
+		
+		text = "";
+
+		for(Player p : game.getPlayers()) // enumerate all players
+		{
+			text += p.toString() + "\n";
+		}
+		
+		playersText.setText(text);
+	}
+	
 	public void addHistory(String msg)
     // PRE: msg has to be initialized
     // POST: adds a new message to history of the gameplay text area
@@ -403,16 +435,24 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	String text;         // string used to build message for labels 
     	Property prop;       // auxilary Property to make code shorter
     	Player player;       // current player
+    	boolean doubleThrow; // flag for double
     	
     	player = game.getCurrentPlayer();
     	
     	if(e.getSource() == diceRollBtn) // roll dice button clicked
 		{
-    		game.rollDice();
+    		doubleThrow = game.rollDice();
     		text = Integer.toString(Player.getDice());
     		
     		addHistory("Rolled " + Player.getDice());
-            diceRollLabel.setText("Dice roll result: " + text);
+    		if(!doubleThrow)
+    		{
+    			diceRollLabel.setText("Dice roll result: " + text);
+    		}
+    		else
+    		{
+    			diceRollLabel.setText("Dice roll result: " + text + " DOUBLE");
+    		}
             moveResult = game.move();
 
             text = "";
@@ -503,11 +543,43 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		    addHistory("**** " + player.getToken() + " ****");
             
             propertiesCombo.removeAllItems();
-            for(Property p : player.getProperties()) // populate combo with properties
+            for(String str : player.getProperties()) // populate combo with properties
             {
-                propertiesCombo.addItem(p.getName());
+                propertiesCombo.addItem(str);
             }
 		}
+    	else if(e.getSource() == endBtn) // end game button
+    	{
+    		// disable UI
+    		giveTurnBtn.setEnabled(false);
+    		buyPropertyBtn.setEnabled(false);
+    		diceRollBtn.setEnabled(false);
+    		propertiesCombo.setEnabled(false);
+    		improvePropertyBtn.setEnabled(false);
+    		diminishPropertyBtn.setEnabled(false);
+    		
+    		text = "";
+    		
+    		for(Player p : game.getPlayers()) // enumerate players
+    		{
+    			text += p.toString() + "\nProperties:\n";
+    			for(String str : p.getProperties()) // enumerate properties
+    			{
+    				text += str;
+    				if(game.getProperty(str) instanceof Lot) // it's lot
+    				{
+    					text += ((Lot) game.getProperty(str)).getHousingLevel();
+    				}
+    				text += "\n";
+    			}
+    			text += "\n";
+    		}
+    		
+    		JOptionPane.showMessageDialog(null,text, "End of the game",
+    				JOptionPane.INFORMATION_MESSAGE);
+    	}
+    	
+    	updatePlayersInfo();
     }   
     
     @Override
