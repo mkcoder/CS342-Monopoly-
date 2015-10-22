@@ -13,7 +13,7 @@ import java.util.Queue;
 public class Game
 {
     public static final int DICE_COUNT = 2;        // how many dice to roll
-    public static final boolean DEMO_MODE = false; // flag that enabled/disables demo mode
+    public static final boolean DEMO_MODE = true;  // flag that enabled/disables demo mode
     private final BoardLocation[] board;           // array of all board locations
     private Player currentPlayer;                  // current player
     private Player[] players;                      // array of all players
@@ -46,18 +46,37 @@ public class Game
     //       some houses/hotels are placed on distributed lots
     {
         int previousPersonLastMove;                         // what was the person last location
+        int propertyPurchased;                              //
         previousPersonLastMove = 0;
+        propertyPurchased = 0;
         for (Player player : players )
         {
             player.setMoney(9000);
-            for ( int i = 0; i < 12; i++ )
+            for ( int i = 0; i < 24; i++ )                      // repeat for 24 spaces
             {
-                if ( previousPersonLastMove != 0 ) player.move(previousPersonLastMove);
+                if ( previousPersonLastMove < 8 && i >= 12) // did we reach half the loop and have less than 8 props
+                {
+                    i = 0;
+                }
+                if ( previousPersonLastMove >= 8 &&             // do i have 8 - 12 properties
+                        previousPersonLastMove <= 12)
+                {
+                    break;
+                }
+                if ( previousPersonLastMove != 0 )              // is this my first time playing the game
+                {
+                    player.move(previousPersonLastMove);
+                }
                 player.move(1);
-                if ( player.getLocation() instanceof Property ) player.buyLocation((Property) player.getLocation());
-                if ( player.getProperties().size() > 3 && i % 2 == 0)
-                    for ( Property p : player.getProperties())
-                        if ( p instanceof Lot ) ((Lot) p).improve();
+
+                if ( player.getLocation() instanceof Property ) // is my current location a property
+                {
+                    player.buyLocation((Property) player.getLocation());
+                    propertyPurchased++;
+                }
+                if ( player.getProperties().size() > 3 && i % 2 == 0)   // do i have 3 props and a factor of 2
+                    for ( Property p : player.getProperties())          // for all my properties
+                        if ( p instanceof Lot ) ((Lot) p).improve();    // is p a lot than imrpove it
                 previousPersonLastMove = i;
             }
         }
