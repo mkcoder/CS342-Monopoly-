@@ -138,6 +138,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		// player panel
 		diceRollBtn = new JButton("Roll Dice");
 		giveTurnBtn = new JButton("Give up turn");
+		giveTurnBtn.setEnabled(false);
 		ownageButton = new JButton("Who owns what?");
 		endBtn = new JButton("End game");
 		diceRollLabel = new JLabel();
@@ -466,6 +467,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	
     	if(e.getSource() == diceRollBtn) // roll dice button clicked
 		{
+    		diceRollBtn.setEnabled(false);
+    		giveTurnBtn.setEnabled(true);
     		doubleThrow = game.rollDice();
     		text = Integer.toString(Player.getDice());
     		
@@ -556,7 +559,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	else if(e.getSource() == giveTurnBtn) // Give turn button clicked
 		{
 		    game.giveTurn();
-		    player = game.getCurrentPlayer();		    
+		    player = game.getCurrentPlayer();
+		    diceRollBtn.setEnabled(true);
+		    giveTurnBtn.setEnabled(false);
 		    
 		    // reset the ui
 		    buyPropertyBtn.setEnabled(false);
