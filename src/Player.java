@@ -142,13 +142,13 @@ public class Player
         }
         
         if(this.money < 0)     //the player is still, broke
-        {
-        	properties = null;
+        {        	
             this.bankrupt = true;
             for(Property p: properties)  //Set each of the player's properties to null
             {
                 p.setOwner(null);
             }
+            properties = null;
         }
     }
 

@@ -68,6 +68,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	private JTextArea  historyText;           // text area that stores the gameplay history
 	private JTextArea  playersText;           // text area that holds info about all players
     private JComboBox  propertiesCombo;       // properties owned by the current player
+    private JComboBox  allPropsCombo;         // all properties on the board
 
     // other members
     private Point[] coordArray; // cooridnates of all game fields in pixels from 0,0
@@ -163,11 +164,17 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		playerScroll.setPreferredSize(new Dimension(PANEL_WIDTH-20, 90));
 		updatePlayersInfo();
 		
+		allPropsCombo = new JComboBox();
+		allPropsCombo.setPreferredSize(new Dimension(PANEL_WIDTH-20, 20));
+		initAllPropsCombo();
+		
 		actionPanel = new JPanel();		
 		actionPanel.add(buyPropertyBtn);
 		actionPanel.add(notificationText);
 		actionPanel.add(new JLabel("Information about players"));
 		actionPanel.add(playerScroll);
+		actionPanel.add(new JLabel("Infomartion about all properties"));
+		actionPanel.add(allPropsCombo);
 		
 		// property panel
 		improvePropertyBtn = new JButton("Improve property");
@@ -209,8 +216,22 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		giveTurnBtn.addActionListener(this);
 		propertiesCombo.addItemListener(this);
 		endBtn.addActionListener(this);
+		allPropsCombo.addItemListener(this);
 	}
 	
+	private void initAllPropsCombo()
+	// PRE: allPropsCombo must be initialized
+	// POST: populates allPropsCombo with all properties
+	{
+		for(BoardLocation b : game.getBoard()) // add all properties
+		{
+			if(b instanceof Property ) // is property
+			{
+				allPropsCombo.addItem(b.getName());
+			}
+		}
+	}
+
 	@Override
 	public void paint(Graphics g)
 	// POST: draws pictures and UI
@@ -597,7 +618,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     		prop = game.getProperty(propertiesCombo.getSelectedItem().toString());
     		
     		text = propertiesCombo.getSelectedItem().toString() + "\n";
-    		if(prop instanceof Lot)
+    		if(prop instanceof Lot) // is Lot
     		{
 	    		text += "Improvement cost: " + ((Lot) prop).getImproveCost() + "\n";
 	    		text += "Gain from diminishing: " + ((Lot) prop).getImproveCost()/2 + "\n";
@@ -607,6 +628,13 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     		}
     				
     		propertyText.setText(text);
+    	}
+    	
+    	if(e.getSource() == allPropsCombo) // allPropsCombo
+    	{
+    		String msg; // string info to display
+    		
+    		msg = ""
     	}
     }
 
