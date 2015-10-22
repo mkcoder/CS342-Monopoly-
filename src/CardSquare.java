@@ -26,9 +26,9 @@ public class CardSquare extends BoardLocation
 		player.addMoney(lastReward);
 		
 		if(lastReward > 0)							   		// lastReward greater than 0
-			return "You have been rewarded $" + lastReward;
+			return "You have been rewarded $" + Math.abs(lastReward);
 		else if(lastReward < 0)								// lastReward less than than 0
-			return "You have been penalized $" + lastReward;
+			return "You have been penalized $" + Math.abs(lastReward);
 		else												// you didn't get any reward
 			return "Yoy got nothing";
 	}

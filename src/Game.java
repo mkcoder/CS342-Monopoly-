@@ -236,16 +236,17 @@ public class Game
     //      dice must be rolled before calling this func
     // POST: calls move() on current player
     //       FCTVAL: returns the message of what happened on the field where player moved to
+    //               and any other relevant information such as "went pass go"
     {
-    	String[] result;
-    	String[] possibleActions;
-    	BoardLocation curLoc;
+    	String[] result;          // array of messages from moving player around
+    	String[] possibleActions; // buffer for getPossibleActions()
+    	BoardLocation curLoc;     // alias for currentPlayer.getLocation()
     	int i;
 
     	result = new String[10];
     	i = 0;
     	
-        if(currentPlayer.move(dice))
+        if(currentPlayer.move(dice)) // player went passed go
         {
         	result[i] = "You just went passed GO and got $200.";
         	i++;
@@ -255,24 +256,24 @@ public class Game
         curLoc = currentPlayer.getLocation();
         possibleActions = curLoc.getPossibleActions(currentPlayer);
 
-        for(String str : possibleActions)
+        for(String str : possibleActions) // interpret possible actions
         {
-        	if(str.equals(BoardLocation.PAY_RENT))
+        	if(str.equals(BoardLocation.PAY_RENT)) // player has to pay rent
         	{
         		result[i] = ((Property) curLoc).collectRent(currentPlayer);
         		i++;
         	}
-        	else if(str.equals(BoardLocation.PAY_TAX))
+        	else if(str.equals(BoardLocation.PAY_TAX)) // player has to pay tax
         	{
         		result[i] = ((TaxSquare) curLoc).payTax(currentPlayer);
         		i++;
         	}
-        	else if(str.equals(BoardLocation.PICK_CARD))
+        	else if(str.equals(BoardLocation.PICK_CARD)) // player got rewarded/penalized
         	{
         		result[i] = ((CardSquare) curLoc).reward(currentPlayer);
         		i++;
         	}
-        	else
+        	else // all other messages
         	{
         		result[i] = str;
         		i++;

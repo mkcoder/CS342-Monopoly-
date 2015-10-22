@@ -11,7 +11,8 @@ public class Utility extends Property
 	
 	public Utility(String name, int address, int cost)
 	// PRE: name, address, and cost is initialized. 0 <= address <= 39, cost >= 0
-    // POST: create a new utility object that has name set to name, address set to address and cost set to cost
+    // POST: create a new utility object that has name set to name
+    // address set to address and cost set to cost
 	{
 		super(name, address, cost);
 	}
@@ -38,7 +39,8 @@ public class Utility extends Property
 	@Override
 	public String toString()
     // POST: returns a string object
-    // fctnval == return a formatted string with location + " COST $" + cost + " Owned by " + player " + ".";
+    // fctnval == return a formatted string 
+	//            with location + " COST $" + cost + " Owned by " + player " + ".";
 	{
 		return super.toString();
 	}

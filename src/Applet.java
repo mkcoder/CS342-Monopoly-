@@ -392,6 +392,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     // POST: adds a new message to history of the gameplay text area
     {
     	historyText.append(msg + "\n");
+    	historyText.setCaretPosition(historyText.getDocument().getLength()); // scroll to bottom
     }
 
     @Override
@@ -430,8 +431,10 @@ public class Applet extends JApplet implements ActionListener, ItemListener
             				!str.equals(BoardLocation.CORNER)) // add relevant actions to history
             		{            			
                 		addHistory(str);
+                		text += str + "\n";
             		}
-            		text += str + "\n";
+            		else                                       // add everything to notification text
+            		    text += str + "\n";
             	}
             }
             
@@ -451,6 +454,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		            addHistory(text);
 		    }
 		    
+		    buyPropertyBtn.setEnabled(false);
 		    notificationText.setText(text);
             playerLabel.setText(player.toString());
 		}    	
