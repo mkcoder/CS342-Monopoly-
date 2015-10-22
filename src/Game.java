@@ -48,6 +48,7 @@ public class Game
         end = 0;
         for (Player player : players )
         {
+            player.setMoney(9000);
             for ( int start = 0; start < 12; start++ )
             {
                 if ( end == 11 ) player.move(11);
