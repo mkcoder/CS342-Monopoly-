@@ -17,25 +17,27 @@ public class CardSquare extends BoardLocation
 		super(name, address);
 	}
 	
-	public void reward(Player player)
+	public String reward(Player player)
 	// PRE: player is an initialized Player object
 	// POST: random amount between -200 and 200 is added 
 	//       to the player's balance
 	{		
 		lastReward = (int)(Math.random()*401 - 200);   // get a random number between -200 and 200
 		player.addMoney(lastReward);
+		
+		if(lastReward > 0)
+			return "You have been rewarded $" + lastReward;
+		else if(lastReward < 0)
+			return "You have been penalized $" + lastReward;
+		else
+			return "Yoy got nothing";
 	}
 
 	@Override
 	public String[] getPossibleActions(Player player)
 	// POST: FCTVAL = an string array describing the actions that happening at this location
 	{
-		if(lastReward > 0)
-			return new String[]{"You have been rewarded $" + lastReward};
-		else if(lastReward < 0)
-			return new String[]{"You have been penalized $" + lastReward};
-		else
-			return new String[]{"Yoy got nothing"};
+		return new String[]{PICK_CARD};
 	}
 	
 }

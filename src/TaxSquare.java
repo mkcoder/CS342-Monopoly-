@@ -17,12 +17,12 @@ public class TaxSquare extends BoardLocation
 		this.tax = tax;
 	}
 
-	public int payTax(Player player)
+	public String payTax(Player player)
     // PRE: player is initialized and is of type player
     // POST: subtracts the tax amount from the player and returns the tax amount collected
 	{	    
 	    player.addMoney(-1*tax);
-	    return tax;
+	    return "You have been taxed $" + tax;
 	}
 	
 	@Override
@@ -30,6 +30,6 @@ public class TaxSquare extends BoardLocation
     // PRE: player must be initialized
     // POST: FCTVAL: return that player has been taxed
     {
-		return new String[]{"You have been taxed $" + tax};
+		return new String[]{PAY_TAX};
     }
 }

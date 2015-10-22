@@ -27,13 +27,15 @@ public class Lot extends Property
 	}
 
 	@Override
-	public void collectRent(Player player) 
+	public String collectRent(Player player) 
     //PRE: player is an initialized object
 	//POST: The value specified at rent[rentIndex] is removed from player.
 	//      The amount of rent is added to owner's balance
 	{
-        lastRent = rent[rentIndex];
+		lastRent = rent[rentIndex];
 		player.transferMoneyTo(owner, rent[rentIndex]);
+		
+		return "You paid $" + lastRent + " rent to " + owner.getToken();
 	}
 	
 	public boolean improve()

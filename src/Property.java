@@ -7,8 +7,7 @@
 package src;
 
 public abstract class Property extends BoardLocation
-{
-	public static final String CAN_BE_PURCHASED = "Can be purchased."; // can be purchased string
+{	
     protected final int cost;						// the cost of property
     protected Player owner;					// who owns the  property
     protected static int lastRent = 0; // last rent any player paid for that property
@@ -23,7 +22,7 @@ public abstract class Property extends BoardLocation
         this.owner = null;
     }
     
-    public abstract void collectRent(Player player);
+    public abstract String collectRent(Player player);
 
     public int getCost()
     // PRE: cost and player is initialized  
@@ -66,8 +65,7 @@ public abstract class Property extends BoardLocation
     	}
     	else // owned and player is not the owner
     	{
-    		return new String[]{String.format("I just paid %d in rent to %s.", 
-    				lastRent, owner)};
+    		return new String[]{PAY_RENT};
     	}
     }
     

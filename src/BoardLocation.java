@@ -9,6 +9,10 @@ package src;
 
 public abstract class BoardLocation
 {
+	public static final String CAN_BE_PURCHASED = "Can be purchased."; // can be purchased string
+	public static final String PAY_RENT = "You have to pay the rent."; // pay rent string
+	public static final String PICK_CARD = "Pick a card."; // pick card string
+	public static final String PAY_TAX = "Pay a tax."; // pay tax string
     protected final String name;   // piece name     
     protected final int address;   // the distance from go
     protected BoardLocation next;  // the next place to move

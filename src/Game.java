@@ -10,10 +10,6 @@ package src;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.sun.xml.internal.bind.v2.runtime.Location;
-
-import sun.security.action.GetLongAction;
-
 public class Game
 {
     public static final int DICE_COUNT = 2;        // how many dice to roll
@@ -235,13 +231,47 @@ public class Game
         return null;	    
     }
 
-    public String move()
+    public String[] move()
     // PRE: currentPlayer class member must be initialized
     //      dice must be rolled before calling this func
     // POST: calls move() on current player
     //       FCTVAL: returns the message of what happened on the field where player moved to
     {
-        return currentPlayer.move(dice);
+    	String[] result;
+    	String[] possibleActions;
+    	boolean passedGo;
+    	
+    	BoardLocation curLoc;
+    	
+    	passedGo = false;
+    	
+        if(currentPlayer.move(dice))
+        {
+        	passedGo = true; //"You just went passed GO and got $200.\n";
+        	currentPlayer.addMoney(200);
+        }        
+        
+        curLoc = currentPlayer.getLocation();
+        possibleActions = curLoc.getPossibleActions(currentPlayer);
+
+        for(String str : possibleActions)
+        {
+        	if(str.equals(BoardLocation.PAY_RENT))
+        	{
+        		((Property) curLoc).collectRent(currentPlayer);
+        	}
+        	else if(str.equals(BoardLocation.PAY_TAX))
+        	{
+        		((TaxSquare) curLoc).payTax(currentPlayer);
+        	}
+        	else if(str.equals(BoardLocation.PICK_CARD))
+        	{
+        		((CardSquare) curLoc).reward(currentPlayer);
+        	}
+        }
+        
+        result = new String[possibleActions.length ];
+
     }
     
     public int rollDice()    

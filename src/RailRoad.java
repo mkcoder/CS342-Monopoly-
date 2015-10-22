@@ -8,8 +8,7 @@ package src;
 
 public class RailRoad extends Property
 {
-	private RailRoad[] others;        // the other railroads on the board
-	private static int lastRent = 0;  // last rent any player paid for RR
+	private RailRoad[] others;        // the other railroads on the board	
 	
 	public RailRoad(String name, int address, int cost)
 	// PRE: name, address, and cost is initialized, 0 <= address <= 39, and cost >= 0
@@ -42,7 +41,7 @@ public class RailRoad extends Property
 	}
 
 	@Override
-	public void collectRent(Player player)
+	public String collectRent(Player player)
 	// PRE: player is initialized, player is another person we are collecting rent from
 	// POST: collects the rent from the player, by building up the payment using others
 	// and if the other player is equal this owner we multiple the payment by 2
@@ -57,5 +56,7 @@ public class RailRoad extends Property
 		}
 		
 		player.transferMoneyTo(owner, lastRent);
+		
+		return "You paid $" + lastRent + " rent to " + owner.getToken();
 	}
 }

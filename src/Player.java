@@ -55,64 +55,26 @@ public class Player
     	// not required!
     }
     
-    public String move(int n)
+    public boolean move(int n)
     // PRE: n is initialized
     // POST: FCTVAL = String with information about any actions the user took 
     //      Player will be moved n spaces, and any rent/taxes will
     //       be collected;
     {
-        String result;          //The string that describes the player's actions
-        int money;              // A local copy to store the player's money
+        boolean passedGo;
         
-        
-        result = "";
-        money = this.getMoney();
-                
+        passedGo = false;
+    	
         for (int i = 0; i < n; i++)      //Move the player n spaces
         {
             location = location.getNext();
             if (location.getName().equals("Go")) //Check to see if GO is passed
             {
-                addMoney(200);                   //Add the salary
-                result += "You just went passed GO and got $200.\n";
+            	passedGo = true;
             }
         }
-
-        if (location instanceof Property &&    //If the new location is a property and 
-           ((Property)location).isOwned())     // it's owned, pay any fines. Append to the result
-                                               //string
-        {            
-            ((Property)(location)).collectRent(this);
-            
-            result += String.format("I just paid %d in rent to %s.\n", 
-            		(money - getMoney()), ((Property)location).getOwner().getToken());
-        }
-        else if (location instanceof Property) //If the location is a buyable property,
-                                               //indicate to the player they can buy it.
-        {
-            result += location.getName() + "\n(Cost $" + ((Property) location).getCost() + ") "
-                    + "is not owned.\nYou can purchase it.\n";
-        }
-        else if(location instanceof CardSquare) //If the location is a CardSquare,
-                                                //then apply whatever penalty is needed
-        {
-        	((CardSquare)(location)).reward(this);      
-        	                                             //If your money is less, then you were penalized, else rewarded
-        	result += String.format("You were %s $%d.\n", 
-    	            (money - getMoney() < 0) ? "penalized" : "rewarded", 
-    	            Math.abs(money - getMoney()));
-        }
-        else if (location instanceof TaxSquare)
-            
-        {
-            result += "You have been taxed $" + ((TaxSquare)location).payTax(this) + ".\n";
-        }
-        else
-        {
-            result += "You are on a corner.\n";
-        }
         
-        return result;
+        return passedGo;
     }
 
     public List<Property> getProperties()
