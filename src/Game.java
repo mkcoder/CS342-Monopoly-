@@ -10,6 +10,10 @@ package src;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.sun.xml.internal.bind.v2.runtime.Location;
+
+import sun.security.action.GetLongAction;
+
 public class Game
 {
     public static final int DICE_COUNT = 2;        // how many dice to roll
@@ -46,39 +50,38 @@ public class Game
     //       some houses/hotels are placed on distributed lots
     {
         int previousPersonLastMove;                         // what was the person last location
-        int propertyPurchased;                              //
+        int propertyPurchased;                              // how many properties has player purchased
         previousPersonLastMove = 0;
-        propertyPurchased = 0;
+        
         for (Player player : players )
         {
+        	int propToPurchase;								// how properties to purchase for the player 
+        	
             player.setMoney(9000);
-            for ( int i = 0; i < 24; i++ )                      // repeat for 24 spaces
+            player.move(previousPersonLastMove);
+            propertyPurchased = 0;            
+            propToPurchase = (int)(Math.random()*(12-8))+8;
+            while ( propertyPurchased < propToPurchase )
             {
-                if ( previousPersonLastMove < 8 && i >= 12) // did we reach half the loop and have less than 8 props
-                {
-                    i = 0;
-                }
-                if ( previousPersonLastMove >= 8 &&             // do i have 8 - 12 properties
-                        previousPersonLastMove <= 12)
-                {
-                    break;
-                }
-                if ( previousPersonLastMove != 0 )              // is this my first time playing the game
-                {
-                    player.move(previousPersonLastMove);
-                }
-                player.move(1);
-
+            	player.move(1);
+        		previousPersonLastMove++;
                 if ( player.getLocation() instanceof Property ) // is my current location a property
                 {
                     player.buyLocation((Property) player.getLocation());
                     propertyPurchased++;
                 }
-                if ( player.getProperties().size() > 3 && i % 2 == 0)   // do i have 3 props and a factor of 2
+                
+                if ( player.getProperties().size() > 3 )   // do i have 3 props and a factor of 2
+                {
                     for ( Property p : player.getProperties())          // for all my properties
-                        if ( p instanceof Lot ) ((Lot) p).improve();    // is p a lot than imrpove it
-                previousPersonLastMove = i;
-            }
+                    {
+                        if ( p instanceof Lot )     	   // is p a lot than imrpove it
+                        {
+                        	((Lot) p).improve();
+                        }
+                    }
+                }
+            }            
         }
     }
 
