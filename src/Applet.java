@@ -3,6 +3,7 @@
 // Date:        Oct 20th, 2015
 // Description: Applet class that models applet which contains entire front end (UI)
 //              for the project
+
 package src;
 
 import java.awt.*;

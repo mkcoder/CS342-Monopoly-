@@ -8,9 +8,10 @@ package src;
 
 public abstract class Property extends BoardLocation
 {
+	public static final String CAN_BE_PURCHASED = "Can be purchased."; // can be purchased string
     protected final int cost;						// the cost of property
     protected Player owner;					// who owns the  property
-    //protected int rent;						// how much rent the person who lends pays
+    protected static int lastRent = 0; // last rent any player paid for that property
 
     public Property(String name, int address, int cost)
     // PRE: name, address, and cost is initialized 0 <= address <= 39, cost >= 0  
@@ -48,6 +49,26 @@ public abstract class Property extends BoardLocation
 	// POST:FCTVAL: is this owned by someone
     {
         return owner != null;
+    }
+    
+    @Override
+	public String[] getPossibleActions(Player player)
+    // PRE: player must be initialized
+    // POST: FCTVAL: return array of all possible actions player can perform for that property
+    {
+		if(owner == null) // not owned
+    	{
+    		return new String[]{CAN_BE_PURCHASED};
+    	}
+    	else if(owner == player) // owned and player is the owner
+    	{
+    		return new String[]{"You own this."};
+    	}
+    	else // owned and player is not the owner
+    	{
+    		return new String[]{String.format("I just paid %d in rent to %s.", 
+    				lastRent, owner)};
+    	}
     }
     
     @Override

@@ -31,7 +31,8 @@ public class Lot extends Property
     //PRE: player is an initialized object
 	//POST: The value specified at rent[rentIndex] is removed from player.
 	//      The amount of rent is added to owner's balance
-	{		
+	{
+        lastRent = rent[rentIndex];
 		player.transferMoneyTo(owner, rent[rentIndex]);
 	}
 	
@@ -73,26 +74,6 @@ public class Lot extends Property
     // POST: FCTVAL = the int improveCost
     {
         return improveCost;
-    }
-
-    @Override
-    public String[] getPossibleActions(Player player)
-    // PRE: player must be initialized
-    // POST: FCTVAL: return array of all possible actions player can perform for that property
-    {    	
-    	if(owner == null) // not owned
-    	{
-    		return new String[]{"Can be purchased."};
-    	}
-    	else if(owner == player) // owned and player is the owner
-    	{
-    		return new String[]{"You own this."};
-    	}
-    	else // owned and player is not the owner
-    	{
-    		return new String[]{String.format("I just paid %d in rent to %s.", 
-            		rent[rentIndex], owner)};
-    	}
     }
 
 	@Override

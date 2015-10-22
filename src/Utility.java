@@ -8,7 +8,7 @@ package src;
 public class Utility extends Property
 {
 	private Utility other;           // the other utility the person can also purchase
-	private static int lastRent = 0; // last rent any player paid for that utility
+	
 	
 	public Utility(String name, int address, int cost)
 	// PRE: name, address, and cost is initialized. 0 <= address <= 39, cost >= 0
@@ -33,26 +33,6 @@ public class Utility extends Property
 		water.other = electric;
 		electric.other = water;
 	}
-
-	@Override
-	public String[] getPossibleActions(Player player)
-    // PRE: player must be initialized
-    // POST: FCTVAL: return array of all possible actions player can perform for that property
-    {
-		if(owner == null) // not owned
-    	{
-    		return new String[]{"Can be purchased."};
-    	}
-    	else if(owner == player) // owned and player is the owner
-    	{
-    		return new String[]{"You own this."};
-    	}
-    	else // owned and player is not the owner
-    	{
-    		return new String[]{String.format("I just paid %d in rent to %s.", 
-    				lastRent, owner)};
-    	}
-    }
 	
 	@Override
 	public String toString()

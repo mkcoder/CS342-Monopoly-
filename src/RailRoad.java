@@ -58,25 +58,4 @@ public class RailRoad extends Property
 		
 		player.transferMoneyTo(owner, lastRent);
 	}
-
-	@Override
-	public String[] getPossibleActions(Player player)
-	// PRE: player must be initialized
-    // POST: FCTVAL: return array of all possible actions player can perform for that RR
-	//               or reports what rent this player paid for that RR
-    {    	
-    	if(owner == null) // not owned
-    	{
-    		return new String[]{"Can be purchased."};
-    	}
-    	else if(owner == player) // owned and player is the owner
-    	{
-    		return new String[]{"You own this."};
-    	}
-    	else // owned and player is not the owner
-    	{
-    		return new String[]{String.format("I just paid %d in rent to %s.", 
-    				lastRent, owner)};
-    	}
-    }
 }
