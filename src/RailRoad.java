@@ -8,7 +8,8 @@ package src;
 
 public class RailRoad extends Property
 {
-	private RailRoad[] others;							// the other railroads on the board
+	private RailRoad[] others;        // the other railroads on the board
+	private static int lastRent = 0;  // last rent any player paid for RR
 	
 	public RailRoad(String name, int address, int cost)
 	// PRE: name, address, and cost is initialized, 0 <= address <= 39, and cost >= 0
@@ -45,28 +46,37 @@ public class RailRoad extends Property
 	// PRE: player is initialized, player is another person we are collecting rent from
 	// POST: collects the rent from the player, by building up the payment using others
 	// and if the other player is equal this owner we multiple the payment by 2
-	{
-		int payment;
-		
-		payment = 25;
+	{		
+		lastRent = 25;
 		for(RailRoad r : others)					// for all the other Railroad
 		{
 			if(r.getOwner() == this.owner) 			// is the current owner the same as the r owner
 			{
-				payment *= 2;
+				lastRent *= 2;
 			}
 		}
 		
-		player.transferMoneyTo(owner, payment);
+		player.transferMoneyTo(owner, lastRent);
 	}
 
 	@Override
 	public String[] getPossibleActions(Player player)
-	// PRE: player is initialized and
-	// POST: FCTNVAL: return a string array of possible actions the player can do
-	{
-		return null;
-	}
-	
-	
+	// PRE: player must be initialized
+    // POST: FCTVAL: return array of all possible actions player can perform for that RR
+	//               or reports what rent this player paid for that RR
+    {    	
+    	if(owner == null) // not owned
+    	{
+    		return new String[]{"Can be purchased."};
+    	}
+    	else if(owner == player) // owned and player is the owner
+    	{
+    		return new String[]{"You own this."};
+    	}
+    	else // owned and player is not the owner
+    	{
+    		return new String[]{String.format("I just paid %d in rent to %s.", 
+    				lastRent, owner)};
+    	}
+    }
 }

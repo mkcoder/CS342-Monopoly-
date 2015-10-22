@@ -16,9 +16,8 @@ public class CornerSquare extends BoardLocation
 
 	@Override
 	public String[] getPossibleActions(Player player)
-	// POST: FCTVAL = an string array describing the actions that happening at this location
+	// POST: FCTVAL = an string array describing the actions for corner
 	{
-		String []actions = {"There is no action you can do!"};
-		return actions;
+		return new String[]{"Corner is for rest!"};
 	}
 }

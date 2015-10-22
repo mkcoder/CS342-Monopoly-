@@ -27,11 +27,9 @@ public class TaxSquare extends BoardLocation
 	
 	@Override
 	public String[] getPossibleActions(Player player)
-    // PRE: player is initialized and is of type player
-    // POST: return a string list of the possible actions player can do next
-    // fctnval == array of possible next move
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    // PRE: player must be initialized
+    // POST: FCTVAL: return that player has been taxed
+    {
+		return new String[]{"You have been taxed $" + tax};
+    }
 }

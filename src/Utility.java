@@ -7,7 +7,8 @@ package src;
 
 public class Utility extends Property
 {
-	private Utility other;			// the other utility the person can also purchase
+	private Utility other;           // the other utility the person can also purchase
+	private static int lastRent = 0; // last rent any player paid for that utility
 	
 	public Utility(String name, int address, int cost)
 	// PRE: name, address, and cost is initialized. 0 <= address <= 39, cost >= 0
@@ -20,11 +21,9 @@ public class Utility extends Property
 	public void collectRent(Player player)
     // PRE:  player is initialized and is of type player
     // POST: subtract amount of rent from the player current earnings ($)
-	{
-		int rent;       // the amount of rent to collect from player
-		
-		rent = other.owner == this.owner ? Player.getDice() * 10 : Player.getDice() * 4;
-		player.transferMoneyTo(owner, rent);
+	{		
+		lastRent = other.owner == this.owner ? Player.getDice() * 10 : Player.getDice() * 4;
+		player.transferMoneyTo(owner, lastRent);
 	}
 	
 	public static void setOther(Utility water, Utility electric)
@@ -37,12 +36,23 @@ public class Utility extends Property
 
 	@Override
 	public String[] getPossibleActions(Player player)
-    // PRE: player is initialized and is of type player
-    // POST: return a string list of the possible actions player can do next
-    // fctnval == array of possible next move
-	{
-        return null;
-	}
+    // PRE: player must be initialized
+    // POST: FCTVAL: return array of all possible actions player can perform for that property
+    {
+		if(owner == null) // not owned
+    	{
+    		return new String[]{"Can be purchased."};
+    	}
+    	else if(owner == player) // owned and player is the owner
+    	{
+    		return new String[]{"You own this."};
+    	}
+    	else // owned and player is not the owner
+    	{
+    		return new String[]{String.format("I just paid %d in rent to %s.", 
+    				lastRent, owner)};
+    	}
+    }
 	
 	@Override
 	public String toString()

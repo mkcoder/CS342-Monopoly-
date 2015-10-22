@@ -75,13 +75,25 @@ public class Lot extends Property
         return improveCost;
     }
 
-	@Override
-	public String[] getPossibleActions(Player player)
-	// POST: FCTVAL = a string array describing the actions that are happening at this location
-	{
-	    String []actions = {"Improve property, Diminish Property, Buy Property"};
-		return actions;
-	}
+    @Override
+    public String[] getPossibleActions(Player player)
+    // PRE: player must be initialized
+    // POST: FCTVAL: return array of all possible actions player can perform for that property
+    {    	
+    	if(owner == null) // not owned
+    	{
+    		return new String[]{"Can be purchased."};
+    	}
+    	else if(owner == player) // owned and player is the owner
+    	{
+    		return new String[]{"You own this."};
+    	}
+    	else // owned and player is not the owner
+    	{
+    		return new String[]{String.format("I just paid %d in rent to %s.", 
+            		rent[rentIndex], owner)};
+    	}
+    }
 
 	@Override
 	public String toString()
