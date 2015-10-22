@@ -1,8 +1,8 @@
 // Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
 // Assignment:  Project 2, Monopoly
 // Date:        Oct 20th, 2015
-// Description: Applet class that models applet which contains entire front end (UI)
-//              for the project
+// Description: A taxsquare that models the ability to collect tax from the other player.
+
 package src;
 
 public class TaxSquare extends BoardLocation

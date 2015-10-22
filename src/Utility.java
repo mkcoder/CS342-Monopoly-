@@ -1,8 +1,8 @@
 // Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
 // Assignment:  Project 2, Monopoly
 // Date:        Oct 20th, 2015
-// Description: Applet class that models applet which contains entire front end (UI)
-//              for the project
+// Description: A utility class that models an utility. This class lets you collect rent from the other person.
+
 package src;
 
 public class Utility extends Property

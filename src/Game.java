@@ -4,6 +4,7 @@
 // Description: Game class that models main game object that stores all back end data
 //              such as players and board fields, manages game state, and implements functions that
 //              connect the back end with the front end
+
 package src;
 
 import java.util.LinkedList;
@@ -44,20 +45,20 @@ public class Game
     // POST: 12 to 18 properties are randomly distributed among players
     //       some houses/hotels are placed on distributed lots
     {
-        int end;                         // where to end the loop
-        end = 0;
+        int previousPersonLastMove;                         // what was the person last location
+        previousPersonLastMove = 0;
         for (Player player : players )
         {
             player.setMoney(9000);
-            for ( int start = 0; start < 12; start++ )
+            for ( int i = 0; i < 12; i++ )
             {
-                if ( end == 11 ) player.move(11);
+                if ( previousPersonLastMove != 0 ) player.move(previousPersonLastMove);
                 player.move(1);
                 if ( player.getLocation() instanceof Property ) player.buyLocation((Property) player.getLocation());
-                if ( player.getProperties().size() > 3 && start % 2 == 0)
+                if ( player.getProperties().size() > 3 && i % 2 == 0)
                     for ( Property p : player.getProperties())
                         if ( p instanceof Lot ) ((Lot) p).improve();
-                end = start;
+                previousPersonLastMove = i;
             }
         }
     }
