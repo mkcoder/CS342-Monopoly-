@@ -25,11 +25,11 @@ public class CardSquare extends BoardLocation
 		lastReward = (int)(Math.random()*401 - 200);   // get a random number between -200 and 200
 		player.addMoney(lastReward);
 		
-		if(lastReward > 0)
+		if(lastReward > 0)							   		// lastReward greater than 0
 			return "You have been rewarded $" + lastReward;
-		else if(lastReward < 0)
+		else if(lastReward < 0)								// lastReward less than than 0
 			return "You have been penalized $" + lastReward;
-		else
+		else												// you didn't get any reward
 			return "Yoy got nothing";
 	}
 

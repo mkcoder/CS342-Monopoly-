@@ -59,8 +59,8 @@ public abstract class BoardLocation
     // PRE: board is an array of BoardLocations with all objects initialized
     // POST: All the boardLocation objects will be linked in circular manner
     {
-    	for(int i=0;i<board.length - 1;i++)
-    		board[i].next = board[i+1];
+    	for(int i=0;i<board.length - 1;i++)             // iterate through the length of the board
+    		board[i].next = board[i+1];                 // and connect the next pointer
     	board[board.length-1].next = board[0];
     }
 }
