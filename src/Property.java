@@ -61,7 +61,7 @@ public abstract class Property extends BoardLocation
     	}
     	else if(owner == player) // owned and player is the owner
     	{
-    		return new String[]{"You own this."};
+    		return new String[]{YOU_OWN};
     	}
     	else // owned and player is not the owner
     	{

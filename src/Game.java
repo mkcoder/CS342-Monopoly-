@@ -13,7 +13,7 @@ import java.util.Queue;
 public class Game
 {
     public static final int DICE_COUNT = 2;        // how many dice to roll
-    public static final boolean DEMO_MODE = true;  // flag that enabled/disables demo mode
+    public static final boolean DEMO_MODE = false;  // flag that enabled/disables demo mode
     private final BoardLocation[] board;           // array of all board locations
     private Player currentPlayer;                  // current player
     private Player[] players;                      // array of all players
@@ -239,17 +239,18 @@ public class Game
     {
     	String[] result;
     	String[] possibleActions;
-    	boolean passedGo;
-    	
     	BoardLocation curLoc;
-    	
-    	passedGo = false;
+    	int i;
+
+    	result = new String[10];
+    	i = 0;
     	
         if(currentPlayer.move(dice))
         {
-        	passedGo = true; //"You just went passed GO and got $200.\n";
+        	result[i] = "You just went passed GO and got $200.";
+        	i++;
         	currentPlayer.addMoney(200);
-        }        
+        }
         
         curLoc = currentPlayer.getLocation();
         possibleActions = curLoc.getPossibleActions(currentPlayer);
@@ -258,20 +259,27 @@ public class Game
         {
         	if(str.equals(BoardLocation.PAY_RENT))
         	{
-        		((Property) curLoc).collectRent(currentPlayer);
+        		result[i] = ((Property) curLoc).collectRent(currentPlayer);
+        		i++;
         	}
         	else if(str.equals(BoardLocation.PAY_TAX))
         	{
-        		((TaxSquare) curLoc).payTax(currentPlayer);
+        		result[i] = ((TaxSquare) curLoc).payTax(currentPlayer);
+        		i++;
         	}
         	else if(str.equals(BoardLocation.PICK_CARD))
         	{
-        		((CardSquare) curLoc).reward(currentPlayer);
+        		result[i] = ((CardSquare) curLoc).reward(currentPlayer);
+        		i++;
+        	}
+        	else
+        	{
+        		result[i] = str;
+        		i++;
         	}
         }
         
-        result = new String[possibleActions.length ];
-
+        return result;
     }
     
     public int rollDice()    

@@ -144,6 +144,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		
 		// action panel		
 		buyPropertyBtn = new JButton("Buy property");
+		buyPropertyBtn.setEnabled(false);
 		notificationText = new JTextArea();
 		notificationText.setEditable(false);
 		notificationText.setBackground(getContentPane().getBackground());
@@ -394,18 +395,40 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     public void actionPerformed(ActionEvent e)
     // POST: handles all buttons clicks
     {
-    	String text;   // string used to build message for labels 
-    	Property prop; // auxilary Property to make code shorter
-    	Player player; // current player
+    	String[] moveResult; // result of move method
+    	String text;         // string used to build message for labels 
+    	Property prop;       // auxilary Property to make code shorter
+    	Player player;       // current player
     	
     	player = game.getCurrentPlayer();
     	
     	if(e.getSource() == diceRollBtn) // roll dice button clicked
 		{
-    		text = "";
     		text = Integer.toString(game.rollDice());
+    		
             diceRollLabel.setText("Dice roll result: " + text);
-            text = player.move(Player.getDice());
+            moveResult = game.move();
+
+            text = "";
+            buyPropertyBtn.setEnabled(false);
+            
+            for(String str : moveResult) // append all strings returned by game.move()
+            {
+            	if(str != null) // there might be null strings
+            	{            		
+            		if(str.equals(BoardLocation.CAN_BE_PURCHASED)) // enable purchase button
+            		{
+            			text += "Can be purchased for $" + ((Property) player.getLocation()).getCost();
+            			buyPropertyBtn.setEnabled(true);
+            		}
+            		else if(!str.equals(BoardLocation.YOU_OWN))
+            		{
+            			text += str + "\n";
+                		addHistory(str);
+            		}
+            	}
+            }
+            
             notificationText.setText(text);
             playerLabel.setText(player.toString());
             repaint();
