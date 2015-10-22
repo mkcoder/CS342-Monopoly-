@@ -148,7 +148,6 @@ public class Player
             {
                 p.setOwner(null);
             }
-            properties = null;
         }
     }
 

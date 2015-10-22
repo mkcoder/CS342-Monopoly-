@@ -439,7 +439,14 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 
 		for(Player p : game.getPlayers()) // enumerate all players
 		{
-			text += p.toString() + "\n";
+			if(!p.isBankrupt()) // not bankrupt
+			{
+				text += p.toString() + "\n";
+			}
+			else  // bankrupt
+			{
+				text += p.getToken() + " is bankrupt";
+			}
 		}
 		
 		playersText.setText(text);
@@ -615,17 +622,20 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     		
     		for(Player p : game.getPlayers()) // enumerate players
     		{
-    			text += p.getToken() + "\n";
-    			for(String str : p.getProperties()) // enumerate properties
+    			if(!p.isBankrupt()) // not bankrupt
     			{
-    				text += str;
-    				if(game.getProperty(str) instanceof Lot) // it's lot
-    				{
-    					text += ((Lot) game.getProperty(str)).getHousingLevel();
-    				}
-    				text += "\n";
+	    			text += p.getToken() + "\n";
+	    			for(String str : p.getProperties()) // enumerate properties
+	    			{
+	    				text += str;
+	    				if(game.getProperty(str) instanceof Lot) // it's lot
+	    				{
+	    					text += ((Lot) game.getProperty(str)).getHousingLevel();
+	    				}
+	    				text += "\n";
+	    			}
+	    			text += "\n";
     			}
-    			text += "\n";
     		}
     		
     		JOptionPane.showMessageDialog(null,text, "Ownership",
