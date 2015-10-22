@@ -423,14 +423,15 @@ public class Applet extends JApplet implements ActionListener, ItemListener
             	{            		
             		if(str.equals(BoardLocation.CAN_BE_PURCHASED)) // enable purchase button
             		{
-            			text += "Can be purchased for $" + ((Property) player.getLocation()).getCost();
+            			text += "Can be purchased for $"+((Property)player.getLocation()).getCost();
             			buyPropertyBtn.setEnabled(true);
             		}
-            		else if(!str.equals(BoardLocation.YOU_OWN)) // add relevant actions to history
-            		{
-            			text += str + "\n";
+            		else if(!str.equals(BoardLocation.YOU_OWN) && 
+            				!str.equals(BoardLocation.CORNER)) // add relevant actions to history
+            		{            			
                 		addHistory(str);
             		}
+            		text += str + "\n";
             	}
             }
             

@@ -14,6 +14,7 @@ public abstract class BoardLocation
 	public static final String PICK_CARD = "Pick a card."; // pick card string
 	public static final String PAY_TAX = "Pay a tax."; // pay tax string
 	public static final String YOU_OWN = "You own this."; // pay tax string
+	public static final String CORNER = "Coming around the corner."; // corner string
     protected final String name;   // piece name     
     protected final int address;   // the distance from go
     protected BoardLocation next;  // the next place to move
