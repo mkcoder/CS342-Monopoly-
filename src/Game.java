@@ -44,15 +44,19 @@ public class Game
     // POST: 12 to 18 properties are randomly distributed among players
     //       some houses/hotels are placed on distributed lots
     {
+        int end;                         // where to end the loop
+        end = 0;
         for (Player player : players )
         {
-            for ( int i = 0; i < 12; i++ )
+            for ( int start = 0; start < 12; start++ )
             {
+                if ( end == 11 ) player.move(11);
                 player.move(1);
                 if ( player.getLocation() instanceof Property ) player.buyLocation((Property) player.getLocation());
-                if ( player.getProperties().size() > 3 && i % 2 == 0)
+                if ( player.getProperties().size() > 3 && start % 2 == 0)
                     for ( Property p : player.getProperties())
                         if ( p instanceof Lot ) ((Lot) p).improve();
+                end = start;
             }
         }
     }

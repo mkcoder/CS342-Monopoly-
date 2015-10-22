@@ -1,4 +1,8 @@
-//khalil
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: Applet class that models applet which contains entire front end (UI)
+//              for the project
 package src;
 
 public class RailRoad extends Property
@@ -44,9 +48,9 @@ public class RailRoad extends Property
 		int payment;
 		
 		payment = 25;
-		for(RailRoad r : others)
+		for(RailRoad r : others)					// for all the other Railroad
 		{
-			if(r.getOwner() == this.owner)
+			if(r.getOwner() == this.owner) 			// is the current owner the same as the r owner
 			{
 				payment *= 2;
 			}

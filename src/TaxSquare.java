@@ -1,4 +1,8 @@
-//khalil
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: Applet class that models applet which contains entire front end (UI)
+//              for the project
 package src;
 
 public class TaxSquare extends BoardLocation
@@ -30,5 +34,4 @@ public class TaxSquare extends BoardLocation
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }
