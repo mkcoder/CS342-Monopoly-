@@ -1,4 +1,8 @@
-//habib
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: Lot class that models a Lot object which includes properties
+//              that allow a Player to improve and diminish this BoardLocation
 package src;
 
 public class Lot extends Property

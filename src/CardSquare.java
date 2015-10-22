@@ -1,11 +1,16 @@
-//habib
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: CardSquare class that models a CardSquare object which includes Community Chest
+//              and Chance.  This BoardLocation has the possibility of rewarding, or penalizing any
+//              Player that lands here.
 package src;
 
 public class CardSquare extends BoardLocation
 {
 	public CardSquare(String name, int address)
 	// PRE: name is an initialized string and  0 <= address <= 40
-	// POST: a CardSquare object is initialized with the specifed name and address
+	// POST: a CardSquare object is initialized with the specified name and address
 	{
 		super(name, address);
 	}

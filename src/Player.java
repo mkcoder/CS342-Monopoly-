@@ -1,4 +1,10 @@
-//habib
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: Player class that models a Player object. This class holds the data
+//              for which properites this player owns and what their balance is at the 
+//              moment.
+//            
 package src;
 
 import java.util.*;

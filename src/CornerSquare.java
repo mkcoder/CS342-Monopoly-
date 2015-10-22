@@ -1,4 +1,8 @@
-//habib
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: CornerSquare class that models a CornerSquare object which includes Go to Jail,
+//              free parking, etc. This BoardLocation doesn't really do anything.
 package src;
 
 public class CornerSquare extends BoardLocation

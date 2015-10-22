@@ -1,4 +1,10 @@
-//habib
+// Programmer:  Maciej Szpakowski, Muhammad Habib Khan, Muhammad Khalil Khan
+// Assignment:  Project 2, Monopoly
+// Date:        Oct 20th, 2015
+// Description: BoardLocation is an abstract class that is the heirachly parent of all locations on the board.
+//              It is meant to represent a generic location on the Monoply Board. All of the methods are inherited from this class 
+//              and implemented by any of its subclasses.
+//             
 package src;
 
 public abstract class BoardLocation
