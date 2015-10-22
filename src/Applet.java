@@ -38,6 +38,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	public static final int PANEL_WIDTH = 230; // width of the JPanel storing JComponents
 	public static final int ITEM_SCALE = 20; // size ratio of the board to tokens/houses
 	public static final int MIN_PANEL_WIDTH = 220; // min width of the jpanel
+	public static final Color COLOR_SAND = new Color(255,255,245); // bg color for some components
 	
 	// images
 	private BufferedImage boardImage; // image of the board
@@ -62,7 +63,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	private JLabel     playerLabel;	          // info about current player
 	private JTextArea  propertyText;          // info about propery chosen from combo box
 	private JTextArea  notificationText;      // feedback from curent action
-	private JTextArea  historyText;           // feedback from curent action
+	private JTextArea  historyText;           // text area that stores the gameplay history
     private JComboBox  propertiesCombo;       // properties owned by the current player
 
     // other members
@@ -74,9 +75,14 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	public void init()
 	// POST: initializes JApplet
 	{
-		JPanel panel;	// panel for JComponents
-		int playerNum;  // number of players for the current game
-				
+		JPanel basePanel;	// panel for all components
+		JPanel historyPanel;// panel for history
+		JScrollPane scroll; // scroll panel for history text area
+		JPanel playerPanel; // panel for player info and roll dice
+		JPanel actionPanel; // panel for buying and info about current action
+		JPanel propPanel;   // panel for managinf properties
+		int playerNum;      // number of players for the current game
+
 		do
 		{
 			try
@@ -103,46 +109,71 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		wheelImage = getImage(WHEELBARROW_FILE);
 		houseImage = getImage(HOUSE_FILE);
 		hotelImage = getImage(HOTEL_FILE);
+
+		// history panel		
+		historyText = new JTextArea();
+		historyText.setEditable(false);		
+		historyText.setBackground(new Color(255,255,245));
+		scroll = new JScrollPane(historyText);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setPreferredSize(new Dimension(PANEL_WIDTH-20, 130));
 		
-	    // jcomponents		
+		historyPanel = new JPanel();
+		historyPanel.add(new JLabel("History"));
+		historyPanel.add(scroll);
+		
+		// player panel
 		diceRollBtn = new JButton("Roll Dice");
-		buyPropertyBtn = new JButton("Buy property");
-		improvePropertyBtn = new JButton("Improve property");
-		diminishPropertyBtn = new JButton("Diminish property");
 		giveTurnBtn = new JButton("Give up turn");
-		
 		diceRollLabel = new JLabel();
+		diceRollLabel.setPreferredSize(new Dimension(PANEL_WIDTH-20, 20));
 		playerLabel = new JLabel(game.getCurrentPlayer().toString());
-		propertyText = new JTextArea("1\n2\n3\n4\n5\n6\n7\n8\n");
-		propertyText.setEditable(false);
-		propertyText.setBackground(getContentPane().getBackground());
+		
+		playerPanel = new JPanel();
+		playerPanel.add(playerLabel);
+		playerPanel.add(diceRollLabel);
+		playerPanel.add(diceRollBtn);
+		playerPanel.add(giveTurnBtn);
+		
+		// action panel		
+		buyPropertyBtn = new JButton("Buy property");
 		notificationText = new JTextArea();
 		notificationText.setEditable(false);
 		notificationText.setBackground(getContentPane().getBackground());
 		
+		actionPanel = new JPanel();		
+		actionPanel.add(buyPropertyBtn);
+		actionPanel.add(notificationText);
+		
+		// property panel
+		improvePropertyBtn = new JButton("Improve property");
+		diminishPropertyBtn = new JButton("Diminish property");
+		propertyText = new JTextArea();
+		propertyText.setEditable(false);
+		propertyText.setBackground(getContentPane().getBackground());
 		propertiesCombo = new JComboBox();		
-		propertiesCombo.addItemListener(this);
+		propertiesCombo.setPreferredSize(new Dimension(PANEL_WIDTH-20, 20));		
+		
+		propPanel = new JPanel();
+		propPanel.add(new JLabel("Your properties"));
+		propPanel.add(propertiesCombo);		
+		propPanel.add(improvePropertyBtn);
+		propPanel.add(diminishPropertyBtn);
+		propPanel.add(propertyText);
 		
 		// layout
 	    setLayout(new BorderLayout());
 	    
-	    panel = new JPanel();
-	    panel.setLayout(new GridLayout(10, 0));
-	    panel.setPreferredSize(new Dimension(MIN_PANEL_WIDTH, 600));
+	    basePanel = new JPanel();
+	    basePanel.setLayout(new GridLayout(4,0));
+	    basePanel.setPreferredSize(new Dimension(MIN_PANEL_WIDTH, 600));
 	    
-	    panel.add(historyText);
-	    panel.add(playerLabel);
-        panel.add(diceRollLabel);
-        panel.add(notificationText);
-        panel.add(diceRollBtn);
-        panel.add(buyPropertyBtn);
-        panel.add(improvePropertyBtn);
-        panel.add(diminishPropertyBtn);
-        panel.add(giveTurnBtn);
-        panel.add(propertyText);
-        panel.add(propertiesCombo);
+	    basePanel.add(historyPanel);
+	    basePanel.add(playerPanel);
+        basePanel.add(actionPanel);
+        basePanel.add(propPanel);
         
-        add(panel, BorderLayout.EAST);
+        add(basePanel, BorderLayout.EAST);
 		
         // listeners
 		diceRollBtn.addActionListener(this);
@@ -150,6 +181,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		improvePropertyBtn.addActionListener(this);
 		diminishPropertyBtn.addActionListener(this);
 		giveTurnBtn.addActionListener(this);
+		propertiesCombo.addItemListener(this);
 	}
 	
 	@Override
@@ -343,6 +375,13 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		
 		return img;
 	}
+	
+	public void addHistory(String msg)
+    // PRE: msg has to be initialized
+    // POST: adds a new message to history of the gameplay text area
+    {
+    	historyText.append(msg + "\n");
+    }
 
     @Override
     public void actionPerformed(ActionEvent e)
@@ -357,8 +396,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	if(e.getSource() == diceRollBtn) // roll dice button clicked
 		{
     		text = "";
-    		//text = Integer.toString(game.rollDice());
-            diceRollLabel.setText("Dice roll result" + text);
+    		text = Integer.toString(game.rollDice());
+            diceRollLabel.setText("Dice roll result: " + text);
             text = player.move(Player.getDice());
             notificationText.setText(text);
             playerLabel.setText(player.toString());
@@ -413,12 +452,12 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		    
 		    // reset the ui
 		    playerLabel.setText(player.toString());		    
-		    diceRollLabel.setText("");		    
+		    diceRollLabel.setText("Dice roll result: ");		    
 		    notificationText.setText("");
 		    propertyText.setText("");
 		    
 		    //history
-		    historyText.append("****" + player.getToken() + "****\n");
+		    historyText.append("**** " + player.getToken() + " ****\n");
             
             propertiesCombo.removeAllItems();
             for(Property p : player.getProperties()) // populate combo with properties
@@ -426,7 +465,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
                 propertiesCombo.addItem(p.getName());
             }
 		}
-    }
+    }   
     
     @Override
     public void itemStateChanged(ItemEvent e)
