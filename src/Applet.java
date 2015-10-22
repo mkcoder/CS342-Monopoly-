@@ -83,18 +83,24 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		JPanel propPanel;   // panel for managinf properties
 		int playerNum;      // number of players for the current game
 
-		do
+		if(!Game.DEMO_MODE) // normal mode
 		{
-			try
+			do
 			{
-				playerNum = new Integer(JOptionPane.showInputDialog("How many players [2-8]"));
-			}
-			catch(NumberFormatException e)
-			{
-				playerNum = 0;
-			}
-		}while(playerNum < 2 || playerNum > 8); // keep asking for player num until valid
-		                                        // value is given
+				try
+				{
+					playerNum = new Integer(JOptionPane.showInputDialog("How many players [2-8]"));
+				}
+				catch(NumberFormatException e)
+				{
+					playerNum = 0;
+				}
+			}while(playerNum < 2 || playerNum > 8); // keep asking for player num until valid
+			                                        // value is given
+		}
+		else               // demo mode
+			playerNum = 2;
+			
 		game = new Game(playerNum);
 		
 		// images

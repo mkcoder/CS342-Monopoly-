@@ -5,19 +5,18 @@ import java.util.*;
 
 public class Player
 {
-    // DATA DICTIONARY
-	private static final int INITIAL_MONEY = 1500;
-	private static int dice = 0;			// dice value
-    private final String token;				// token
-    private int money;						// how much money you have
+	private static final int INITIAL_MONEY = 1500; // amount of money each player get on start
+	private static int dice = 0;			// current dice value
+    private final String token;				// token name
+    private int money;						// amount of money you have
     private BoardLocation location;			// the current player location
-    private List<Property> properties;		// the properties we own
-    private boolean bankrupt;				// is the person bankrupt
+    private List<Property> properties;		// the properties player owns
+    private boolean bankrupt;				// flag indicating is the player bankrupt
     
     public Player(String token, BoardLocation go)
     //PRE: token is an initialized string and that Boardlocation
     //     is the the Boardlocation object for "go"
-    //POST: A player objects is initialized at go with initial money, the 
+    //POST: A player objects is initialized at go with initial money INITIAL_MONEY, the 
     //      specified token and an empty list of properties
     {
         this.money = INITIAL_MONEY;
@@ -35,11 +34,11 @@ public class Player
     //       subtracted from the player's money.
     {
         if ( property.getCost() <= money &&     //The location is not owned and 
-             property.getOwner() == null )      //the player has enough money to but it
+             property.getOwner() == null )      //the player has enough money to buy it
         {
-            properties.add(property);           // Add to the player's property list  
-            addMoney(-1 * property.getCost());  // Substract the money from the player's balance
-            property.setOwner(this);            // Mark the property as owned
+            properties.add(property);
+            addMoney(-1 * property.getCost());
+            property.setOwner(this);
             return true;
         }
         return false;
@@ -51,7 +50,7 @@ public class Player
     }
     
     public String move(int n)
-    // PRE: 
+    // PRE: n is initialized
     // POST: FCTVAL = String with information about any actions the user took 
     //      Player will be moved n spaces, and any rent/taxes will
     //       be collected;
@@ -111,7 +110,7 @@ public class Player
     }
 
     public List<Property> getProperties()
-    //FCTVAL = the properties owned by the player
+    // POST:FCTVAL = the properties owned by the player
     {
         return properties;
     }
@@ -119,27 +118,28 @@ public class Player
     public void addMoney(int money)
     // PRE: money is some integer value
     // POST: the specified value will be added to player's balance
+    //       or subtracted if value is negative
     {
         setMoney(this.money+money);
     }
 
-    public void transferMoneyTo(Player player, int money)
-    //PRE: player is an initialized object, money is an integer value.
+    public void transferMoneyTo(Player recipient, int money)
+    //PRE: player and money are initialized
     //POST:  the specifed value will be taken from this player and added to 
-    //       player object sent in.
+    //       recipient's money
     {
         this.addMoney(-1 * money);
-        player.addMoney(money);
+        recipient.addMoney(money);
     }
 
     public int getMoney()
-    //FCTVAL = the balance of the player as an integer
+    // POST:FCTVAL = the balance of the player as an integer
     {
         return money;
     }
 
     public void setMoney(int money)
-    // PRE: money is an integer value
+    // PRE: money is initialized
     // POST: the specifed money will be added to the player's balance
     //       This method also checks to see if the player has a negative balance
     {
@@ -151,25 +151,23 @@ public class Player
     }
 
     private void declareBankruptcy()
-    // POST: If the function is called, then the player's properties are 
-    //       downgraded until their balance is > 0. If the player still
+    // POST: Keep selling houses/hotels until this.money >= 0. If the player
     //       is still broke after the initial downgrading, then all their
-    //       Properties are "sold" to the bank.
+    //       Properties are returned to the bank.
     {
         for(Property p: properties)
         {
-            if(p instanceof Lot &&  ((Lot) p).getRentIndex() > 0) //If the player's property has been improved
-                                                                  // then downgrade.
+            if(p instanceof Lot &&  ((Lot) p).getRentIndex() > 0) // property that has houses/hotels
             {
-                while(((Lot) p).getRentIndex() > 0 && this.money < 0)
+                while(((Lot) p).getRentIndex() > 0 && this.money < 0) // keep selling/houses hotels
+                	                                                  // until this.money >= 0
                 {
                     ((Lot) p).diminish();
                 }
             }
         }
         
-        if(this.money < 0)     //If the player is still, broke
-                               // sell all their properties
+        if(this.money < 0)     //the player is still, broke
         {
             this.bankrupt = true;
             for(Property p: properties)  //Set each of the player's properties to null
@@ -180,7 +178,7 @@ public class Player
     }
 
     public BoardLocation getLocation()
-    // FCTVAL = the Boardlocation of this player
+    //  POST:FCTVAL = the Boardlocation of this player
     {
         return location;
     }
@@ -193,33 +191,33 @@ public class Player
     }
 
     public boolean isBankrupt()
-    // FCTVAL = a boolean if the player is bankrupt or not
+    //  POST:FCTVAL = a boolean if the player is bankrupt or not
     {
         return bankrupt;
     }
 
 	public static int getDice()
-	// FCTVAL = the value of dice is returned as an int
+	//  POST:FCTVAL = the value of dice is returned as an int
 	{
 		return dice;
 	}
 	
 	public static void setDice(int dice)
-	//PRE:  0 < dice <=6
+	//PRE:  1*numOfDice < dice <= 6*numOfDice
 	//POST: The value of dice is updated
 	{	  
         Player.dice = dice;
     }
 
     public String getToken()
-    // FCTVAL = a String with the player's token
+    //  POST:FCTVAL = a String with the player's token
 	{
 		return token;
 	}
 	
 	@Override
 	public String toString()
-	// FCTVAL = A string the describes the player's token and money.
+	//  POST:FCTVAL = A string the describes the player's token and money.
 	//         If the player is broke, then that is indicated
 	{
 		if(!bankrupt)

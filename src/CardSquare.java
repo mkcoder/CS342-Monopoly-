@@ -12,12 +12,12 @@ public class CardSquare extends BoardLocation
 	
 	public int reward(Player player)
 	// PRE: player is an initialized Player object
-	// POST: FCTVAL = a random amount between 0 and 200 is added 
-	//                to the player's balance
+	// POST: FCTVAL = a random amount between -200 and 200 is added 
+	//                to the player's balance and returned
 	{
 		int amount;       // amount to be added
 		
-		amount = (int)(Math.random()*401 - 200);   // get a random number between 0 and 200
+		amount = (int)(Math.random()*401 - 200);   // get a random number between -200 and 200
 		player.addMoney(amount);
 		
 		return amount;
@@ -25,7 +25,7 @@ public class CardSquare extends BoardLocation
 
 	@Override
 	public String[] getPossibleActions(Player player)
-	// FCTVAL = an string array describing the actions that happening at this location
+	// POST: FCTVAL = an string array describing the actions that happening at this location
 	{
 	    String []actions = {"be rewarded"};
 		return actions;

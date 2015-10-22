@@ -12,7 +12,7 @@ public class CornerSquare extends BoardLocation
 
 	@Override
 	public String[] getPossibleActions(Player player)
-	// FCTVAL = an string array describing the actions that happening at this location
+	// POST: FCTVAL = an string array describing the actions that happening at this location
 	{
 		String []actions = {"There is no action you can do!"};
 		return actions;

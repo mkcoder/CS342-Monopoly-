@@ -4,18 +4,16 @@ package src;
 public class Lot extends Property
 {
 	private final String color;					// color of the board piece
-	private final int[] rent;                   // array with different possible rents
+	private final int[] rent;                   // array with different possible rents	
+	private final int improveCost;              // Cost of improving this lot	
 	private int rentIndex;                      // The rent we should be charging
-	private final int improveCost;              // Cost of improving this lot
-	
-	
+	                                            // current housing level of the lot
 
     public Lot(String name, int address, int cost, 
 			   String color, int improve, int[] rent)
     // PRE: name and color are intialized strings,
-	//      0 < address <= 40, improve and rent are both intialized		   
+	//      0 <= address <= 40, improve and rent are both intialized		   
     //POST: a lot object with the given values is intialized
-	//		   
 	{
 		super(name, address, cost);
 		this.color = color;
@@ -26,24 +24,20 @@ public class Lot extends Property
 
 	@Override
 	public void collectRent(Player player) 
-    //PRE: player is an initialized object, money is an integer value.
-	//POST: The value speciifed at rent[rentIndex] is removed from player.
+    //PRE: player is an initialized object
+	//POST: The value specified at rent[rentIndex] is removed from player.
 	//      The amount of rent is added to owner's balance
-	{
-		int payment;       //The amount of money being removed/added
-		
-		payment = rent[rentIndex];
-		
-		player.transferMoneyTo(owner, payment);
+	{		
+		player.transferMoneyTo(owner, rent[rentIndex]);
 	}
 	
 	public boolean improve()
-	// PRE: It is assumed that the player has the necessary requirement in order to build
+	// PRE: It is assumed that the player has met the necessary requirement in order to build
 	//      the houses and hotels. 
-	// POST:   FCTVAL = a boolean that is true if owner can improve lot, false o.w
+	// POST:   FCTVAL = a boolean that is true if lot has been improved, false o.w
 	{
-		if(owner != null && owner.getMoney() >= improveCost &&     // If the owner has enough money and  
-		   rentIndex < rent.length - 1)                            // we still can improve, then improve the lot
+		if(owner != null && owner.getMoney() >= improveCost && // the owner has enough money and  
+		   rentIndex < rent.length - 1)                        // housing level is less than hotel
 		{
 			rentIndex++;                     // increment the rent counter
 			owner.addMoney(-1*improveCost);  // remove the improve cost from the owner's balance 
@@ -53,7 +47,7 @@ public class Lot extends Property
 	}
 	
 	public int getRentIndex()
-	// FCVTVAL = the rentIndex, i.e how many house/hotels should be here
+	// POST: FCVTVAL = the rentIndex, i.e how many house/hotels should be here
 	{
         return rentIndex;
     }
@@ -72,14 +66,14 @@ public class Lot extends Property
 	}
     
     public int getImproveCost() 
-    // FCTVAL = the int improveCost
+    // POST: FCTVAL = the int improveCost
     {
         return improveCost;
     }
 
 	@Override
 	public String[] getPossibleActions(Player player)
-	// FCTVAL = an string array describing the actions that happening at this location
+	// POST: FCTVAL = a string array describing the actions that are happening at this location
 	{
 	    String []actions = {"Improve property, Diminish Property, Buy Property"};
 		return actions;
@@ -87,7 +81,7 @@ public class Lot extends Property
 
 	@Override
 	public String toString()
-	// FCTVAL = A string the describes properties name, address, cost.         
+	// POST: FCTVAL = A string the describes property's name, address, cost.
 	{
 		return super.toString() + " Color: " + color + ".";
 	}
