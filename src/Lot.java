@@ -38,6 +38,13 @@ public class Lot extends Property
 		return "You paid $" + lastRent + " rent to " + owner.getToken();
 	}
 	
+	@Override
+	public int getRent()
+	// POST: FCTVAL: returns current rent for this property
+	{
+		return rent[rentIndex];
+	}
+	
 	public boolean improve()
 	// PRE: It is assumed that the player has met the necessary requirement in order to build
 	//      the houses and hotels

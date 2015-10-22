@@ -38,7 +38,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	public static final int OFFSET_Y = 10; // y position of the board in applet in pixels from 0,0
 	public static final int PANEL_WIDTH = 230; // width of the JPanel storing JComponents
 	public static final int ITEM_SCALE = 20; // size ratio of the board to tokens/houses
-	public static final int MIN_PANEL_WIDTH = 220; // min width of the jpanel
+	public static final int MIN_PANEL_WIDTH = 260; // min width of the jpanel
 	public static final Color COLOR_SAND = new Color(255,255,245); // bg color for some components
 	
 	// images
@@ -177,9 +177,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		actionPanel.add(allPropsCombo);
 		
 		// property panel
-		improvePropertyBtn = new JButton("Improve property");
+		improvePropertyBtn = new JButton("Improve");
 		improvePropertyBtn.setEnabled(false);
-		diminishPropertyBtn = new JButton("Diminish property");
+		diminishPropertyBtn = new JButton("Diminish");
 		diminishPropertyBtn.setEnabled(false);
 		propertyText = new JTextArea();
 		propertyText.setEditable(false);
@@ -630,11 +630,29 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     		propertyText.setText(text);
     	}
     	
-    	if(e.getSource() == allPropsCombo) // allPropsCombo
+    	else if(e.getSource() == allPropsCombo && 
+    	    	   propertiesCombo.getSelectedItem() != null) // allPropsCombo
     	{
     		String msg; // string info to display
+    		Property p;
     		
-    		msg = ""
+    		msg = "";
+    		p = game.getProperty(propertiesCombo.getSelectedItem().toString());
+    		
+    		msg += p.toString();
+    		
+    		if((p instanceof Lot || p instanceof RailRoad) // add rent if applicable
+    				&& p.getOwner() != null)
+    		{
+    			msg += "Current rent: $" + p.getRent() + "\n";
+    			if(p instanceof Lot)                // add housing level for Lots
+    			{
+    				msg += ((Lot) p).getHousingLevel() + "\n";
+    			}
+    		}
+    		
+    		JOptionPane.showMessageDialog(null, msg,"Info",
+    				JOptionPane.INFORMATION_MESSAGE);
     	}
     }
 

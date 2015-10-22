@@ -49,7 +49,7 @@ public class RailRoad extends Property
 		lastRent = 25;
 		for(RailRoad r : others)					// for all the other Railroad
 		{
-			if(r.getOwner() == this.owner) 			// is the current owner the same as the r owner
+			if(r.owner == this.owner) 			// is the current owner the same as the r owner
 			{
 				lastRent *= 2;
 			}
@@ -59,4 +59,24 @@ public class RailRoad extends Property
 		
 		return "You paid $" + lastRent + " rent to " + owner.getToken();
 	}
+	
+	@Override
+	public int getRent()
+	// PRE: others have to be initialized
+	// POST: returns collect rent value
+	{
+	
+		int rent; // rent to return
+		
+		rent = 25;
+		for(RailRoad r : others)	// for all the other Railroad
+		{
+			if(r.owner == this.owner) // is the current owner the same as the r owner
+			{
+				lastRent *= 2;
+			}
+		}
+		
+		return rent;
+	}	
 }

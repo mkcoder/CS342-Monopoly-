@@ -23,6 +23,8 @@ public abstract class Property extends BoardLocation
     }
     
     public abstract String collectRent(Player player);
+    
+    public abstract int getRent();
 
     public int getCost()
     // PRE: cost and player is initialized  

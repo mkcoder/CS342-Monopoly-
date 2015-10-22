@@ -28,6 +28,13 @@ public class Utility extends Property
 		return "You paid $" + lastRent + " rent to " + owner.getToken();
 	}
 	
+	@Override
+	public int getRent()
+	// POST: FCTVAL: returns 0 because rent is not known until dice roll
+	{
+		return 0;
+	}
+	
 	public static void setOther(Utility water, Utility electric)
     // PRE: wave and electric is initialized
     // POST: does a basic swap by setting each other to each other
