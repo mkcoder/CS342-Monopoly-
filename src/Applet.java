@@ -121,6 +121,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		historyText = new JTextArea();
 		historyText.setEditable(false);		
 		historyText.setBackground(new Color(255,255,245));
+		addHistory("**** " + game.getCurrentPlayer().getToken() + " ****");
 		scroll = new JScrollPane(historyText);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setPreferredSize(new Dimension(PANEL_WIDTH-20, 130));
@@ -155,7 +156,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		
 		// property panel
 		improvePropertyBtn = new JButton("Improve property");
+		improvePropertyBtn.setEnabled(false);
 		diminishPropertyBtn = new JButton("Diminish property");
+		diminishPropertyBtn.setEnabled(false);
 		propertyText = new JTextArea();
 		propertyText.setEditable(false);
 		propertyText.setBackground(getContentPane().getBackground());
@@ -326,7 +329,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	    double divFactor;   // distance between points on an edge
 	 
 	    tempCoord = new Point[40];
-	    divFactor = (boardScale/10) * (0.825);
+	    divFactor = (boardScale/10) * (0.825); // factor that scales edges nicely
 	    
 	    for(int i = 0; i < 11 ;i++) // bottom edge
 	    {
@@ -404,8 +407,10 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	
     	if(e.getSource() == diceRollBtn) // roll dice button clicked
 		{
-    		text = Integer.toString(game.rollDice());
+    		game.rollDice();
+    		text = Integer.toString(Player.getDice());
     		
+    		addHistory("Rolled " + Player.getDice());
             diceRollLabel.setText("Dice roll result: " + text);
             moveResult = game.move();
 
@@ -421,7 +426,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
             			text += "Can be purchased for $" + ((Property) player.getLocation()).getCost();
             			buyPropertyBtn.setEnabled(true);
             		}
-            		else if(!str.equals(BoardLocation.YOU_OWN))
+            		else if(!str.equals(BoardLocation.YOU_OWN)) // add relevant actions to history
             		{
             			text += str + "\n";
                 		addHistory(str);
@@ -442,6 +447,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		    {
 		            text = "You purchased " + player.getLocation().getName();
 		            propertiesCombo.addItem(player.getLocation().getName());
+		            addHistory(text);
 		    }
 		    
 		    notificationText.setText(text);
@@ -452,9 +458,10 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		    text = "You cannot improve the lot!";
 		    prop = game.getProperty(propertiesCombo.getSelectedItem().toString());
 		    
-		    if(prop instanceof Lot && ((Lot) prop).improve()) // improved successfully
+		    if(((Lot) prop).improve()) // improved successfully
 		    {
-		    	text = "You have improved your lot!\n";
+		    	text = "You have improved your lot!";
+		    	addHistory(text);
 		        repaint();
 		    }
 		    
@@ -466,9 +473,10 @@ public class Applet extends JApplet implements ActionListener, ItemListener
             text = "You cannot diminish the lot!";
             prop = game.getProperty(propertiesCombo.getSelectedItem().toString());
             
-            if(prop instanceof Lot && ((Lot)prop).diminish()) // diminished successfully
-            {
-            	text ="You have diminished your lot!\n";
+            if(((Lot)prop).diminish()) // diminished successfully
+            {            	
+            	text ="You have diminished your lot!";
+            	addHistory(text);
                 repaint();
             }
             
@@ -478,16 +486,16 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	else if(e.getSource() == giveTurnBtn) // Give turn button clicked
 		{
 		    game.giveTurn();
-		    player = game.getCurrentPlayer();
+		    player = game.getCurrentPlayer();		    
 		    
 		    // reset the ui
-		    playerLabel.setText(player.toString());		    
-		    diceRollLabel.setText("Dice roll result: ");		    
+		    buyPropertyBtn.setEnabled(false);
+		    playerLabel.setText(player.toString());
+		    diceRollLabel.setText("Dice roll result: ");
 		    notificationText.setText("");
 		    propertyText.setText("");
-		    
-		    //history
-		    historyText.append("**** " + player.getToken() + " ****\n");
+
+		    addHistory("**** " + player.getToken() + " ****");
             
             propertiesCombo.removeAllItems();
             for(Property p : player.getProperties()) // populate combo with properties
@@ -503,6 +511,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	String text;   // message built for propLabel
     	Property prop; // selected property
     	
+    	improvePropertyBtn.setEnabled(false);
+		diminishPropertyBtn.setEnabled(false);
+    	
     	if(e.getSource() == propertiesCombo && 
     	   propertiesCombo.getSelectedItem() != null) // combo state changed and it's not empty
     	{
@@ -513,6 +524,9 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     		{
 	    		text += "Improvement cost: " + ((Lot) prop).getImproveCost() + "\n";
 	    		text += "Gain from diminishing: " + ((Lot) prop).getImproveCost()/2 + "\n";
+	    		
+	    		improvePropertyBtn.setEnabled(true);
+	    		diminishPropertyBtn.setEnabled(true);
     		}
     				
     		propertyText.setText(text);
