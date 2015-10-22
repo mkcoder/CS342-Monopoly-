@@ -22,7 +22,7 @@ public class TaxSquare extends BoardLocation
     // POST: subtracts the tax amount from the player and returns the tax amount collected
 	{	    
 	    player.addMoney(-1*tax);
-	    return "You have been taxed $" + tax;
+	    return "You have been taxed $" + tax + "    ";
 	}
 	
 	@Override

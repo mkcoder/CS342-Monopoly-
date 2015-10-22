@@ -61,6 +61,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 	private JButton    improvePropertyBtn;    // Improve property button
 	private JButton    diminishPropertyBtn;   // Diminish property button
 	private JButton    giveTurnBtn;           // Give turn button
+	private JButton    ownageButton;          // Who own what button
     private JLabel     diceRollLabel;         // dice result label
 	private JLabel     playerLabel;	          // info about current player
 	private JTextArea  propertyText;          // info about propery chosen from combo box
@@ -137,6 +138,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		// player panel
 		diceRollBtn = new JButton("Roll Dice");
 		giveTurnBtn = new JButton("Give up turn");
+		ownageButton = new JButton("Who owns what?");
 		endBtn = new JButton("End game");
 		diceRollLabel = new JLabel();
 		diceRollLabel.setPreferredSize(new Dimension(PANEL_WIDTH-20, 20));
@@ -147,11 +149,12 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		playerPanel.add(diceRollLabel);
 		playerPanel.add(diceRollBtn);
 		playerPanel.add(giveTurnBtn);
+		playerPanel.add(ownageButton);
 		playerPanel.add(endBtn);
 		
 		// action panel		
 		buyPropertyBtn = new JButton("Buy property");
-		buyPropertyBtn.setEnabled(false);
+		buyPropertyBtn.setEnabled(false);		
 		notificationText = new JTextArea();
 		notificationText.setEditable(false);
 		notificationText.setBackground(getContentPane().getBackground());
@@ -161,7 +164,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		playersText.setBackground(new Color(255,255,245));
 		playerScroll = new JScrollPane(playersText);
 		playerScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		playerScroll.setPreferredSize(new Dimension(PANEL_WIDTH-20, 90));
+		playerScroll.setPreferredSize(new Dimension(PANEL_WIDTH-20, 60));
 		updatePlayersInfo();
 		
 		allPropsCombo = new JComboBox();
@@ -217,6 +220,7 @@ public class Applet extends JApplet implements ActionListener, ItemListener
 		propertiesCombo.addItemListener(this);
 		endBtn.addActionListener(this);
 		allPropsCombo.addItemListener(this);
+		ownageButton.addActionListener(this);
 	}
 	
 	private void initAllPropsCombo()
@@ -600,6 +604,29 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     				JOptionPane.INFORMATION_MESSAGE);
     	}
     	
+    	else if(e.getSource() == ownageButton) // Who owns what button
+    	{
+    		text = "";
+    		
+    		for(Player p : game.getPlayers()) // enumerate players
+    		{
+    			text += p.getToken() + "\n";
+    			for(String str : p.getProperties()) // enumerate properties
+    			{
+    				text += str;
+    				if(game.getProperty(str) instanceof Lot) // it's lot
+    				{
+    					text += ((Lot) game.getProperty(str)).getHousingLevel();
+    				}
+    				text += "\n";
+    			}
+    			text += "\n";
+    		}
+    		
+    		JOptionPane.showMessageDialog(null,text, "Ownership",
+    				JOptionPane.INFORMATION_MESSAGE);
+    	}
+    	
     	updatePlayersInfo();
     }   
     
@@ -631,15 +658,15 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     	}
     	
     	else if(e.getSource() == allPropsCombo && 
-    	    	   propertiesCombo.getSelectedItem() != null) // allPropsCombo
+    			allPropsCombo.getSelectedItem() != null) // allPropsCombo
     	{
     		String msg; // string info to display
     		Property p;
     		
     		msg = "";
-    		p = game.getProperty(propertiesCombo.getSelectedItem().toString());
+    		p = game.getProperty(allPropsCombo.getSelectedItem().toString());
     		
-    		msg += p.toString();
+    		msg += p.toString() + "\n";
     		
     		if((p instanceof Lot || p instanceof RailRoad) // add rent if applicable
     				&& p.getOwner() != null)
@@ -650,6 +677,8 @@ public class Applet extends JApplet implements ActionListener, ItemListener
     				msg += ((Lot) p).getHousingLevel() + "\n";
     			}
     		}
+    		
+    		msg += "\n";
     		
     		JOptionPane.showMessageDialog(null, msg,"Info",
     				JOptionPane.INFORMATION_MESSAGE);

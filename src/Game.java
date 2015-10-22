@@ -13,7 +13,7 @@ import java.util.Queue;
 public class Game
 {
     public static final int DICE_COUNT = 2;        // how many dice to roll
-    public static final boolean DEMO_MODE = false;  // flag that enabled/disables demo mode
+    public static final boolean DEMO_MODE = true;  // flag that enabled/disables demo mode
     private final BoardLocation[] board;           // array of all board locations
     private Player currentPlayer;                  // current player
     private Player[] players;                      // array of all players
